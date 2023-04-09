@@ -10,7 +10,7 @@ public class DialogueController : MonoBehaviour
     protected int dialogue_index;
 
     public delegate void OnDialogueFinishedDelegate();
-    public OnDialogueFinishedDelegate onDialogueFinished;
+    public OnDialogueFinishedDelegate onDialogueFinished = () => { };
 
     public virtual void InitDialogue()
     {
