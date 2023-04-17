@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueControllerAdditive : DialogueController
+public class DialogueController_additive : DialogueController
 {
     public GameObject dialoguePiece_prefab;
 
@@ -11,9 +11,16 @@ public class DialogueControllerAdditive : DialogueController
     public RectTransform dialogue_panel_content;
     public HorizontalOrVerticalLayoutGroup layoutGroup;
 
-    private void Start()
+
+    //private void Start()
+    //{
+    //    InitDialogue();
+    //    Resize();
+    //}
+
+    public override void StartDialogue()
     {
-        InitDialogue();
+        base.StartDialogue();
         Resize();
     }
 

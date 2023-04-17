@@ -13,7 +13,7 @@ public class DialogueClickArea : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnBeginDrag(PointerEventData pointerEventData)
     {
-        Debug.Log("OnBeginDrag");
+        //Debug.Log("OnBeginDrag");
         mousePosOnDragStart = Input.mousePosition;
         // Or something else you need to do at the start of the drag.
     }
@@ -38,7 +38,7 @@ public class DialogueClickArea : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnEndDrag(PointerEventData pointerEventData)
     {
-        Debug.Log("OnEndDrag");
+        //Debug.Log("OnEndDrag");
         ExecuteEvents.Execute(scrollRect.gameObject, pointerEventData, ExecuteEvents.endDragHandler);
         passingEvent = false;
     }
@@ -46,7 +46,7 @@ public class DialogueClickArea : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnPointerClick(PointerEventData eventData)
     {
         if (passingEvent) return;
-        controller.NextDialogue();
+        controller.OnClickAreaClicked();
     }
 
 

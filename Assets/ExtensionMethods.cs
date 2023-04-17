@@ -19,4 +19,16 @@ public static class ExtensionMethods
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
+    public static void SetValue(this CanvasGroup canvasGroup, bool value)
+    {
+        canvasGroup.alpha = value ? 1 : 0;
+        canvasGroup.interactable = value;
+        canvasGroup.blocksRaycasts = value;
+    }
+    public static void SetValue(this CanvasGroup canvasGroup, float alpha,bool interactable,bool blocksRaycasts)
+    {
+        canvasGroup.alpha = alpha;
+        canvasGroup.interactable = interactable;
+        canvasGroup.blocksRaycasts = blocksRaycasts;
+    }
 }

@@ -325,6 +325,7 @@ GameObject:
   - component: {fileID: 2733420446688054084}
   - component: {fileID: 2733420446688054085}
   - component: {fileID: 2733420446688054087}
+  - component: {fileID: 6023228397134425131}
   m_Layer: 5
   m_Name: Dialogue basic
   m_TagString: Untagged
@@ -404,7 +405,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueSet: {fileID: 11400000, guid: d5ce67e0cfbe55d4dba37787eb5ae101, type: 2}
+  canvasGroup: {fileID: 6023228397134425131}
   dialoguePiece_prefab: {fileID: 6945675982492965956, guid: 8d446f3a38bf4f84fb47d9f98b6a7b5c, type: 3}
   dialogue_panel_main: {fileID: 2733420444961968536}
   dialogue_panel_content: {fileID: 2733420444999585228}
   layoutGroup: {fileID: 2733420444999585225}
+--- !u!225 &6023228397134425131
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2733420446688054091}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
