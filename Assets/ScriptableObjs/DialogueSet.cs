@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-[CreateAssetMenu(menuName = "ScriptableObjects/DialogueSet")]
+[CreateAssetMenu(menuName = "ScriptableObject/DialogueSet")]
 public class DialogueSet : ScriptableObject
 {
     public string id;

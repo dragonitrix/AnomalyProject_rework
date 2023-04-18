@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MissionPage : MonoBehaviour
 {
+    [HideInInspector]
     public MissionManager manager;
     public bool isFinished = false;
 

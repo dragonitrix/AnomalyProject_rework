@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(menuName = "scriptableObject/DatabaseEndpoint")]
+[CreateAssetMenu(menuName = "ScriptableObject/DatabaseEndpoint")]
 [Serializable]
 public class DatabaseEndpoint : ScriptableObject
 {

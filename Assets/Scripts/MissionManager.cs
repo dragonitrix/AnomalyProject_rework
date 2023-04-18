@@ -17,13 +17,27 @@ public class MissionManager : MonoBehaviour
 
     public bool isTweening = false;
 
+    [Header("UI")]
+    public CanvasGroup btn_prev_cg;
+    public CanvasGroup btn_next_cg;
+
     // Start is called before the first frame update
     void Start()
     {
+        FetchPages();
         InitMissionPage();
         StartMission();
+        UpdatePageButton();
     }
 
+    public void FetchPages()
+    {
+        missionPages.Clear();
+        foreach (Transform t in missionPanel)
+        {
+            missionPages.Add(t.GetComponent<MissionPage>());
+        }
+    }
 
     public void InitMissionPage()
     {
@@ -110,6 +124,7 @@ public class MissionManager : MonoBehaviour
         System.Action<ITween<Vector2>> onComplete = (t) =>
         {
             isTweening = false;
+            UpdatePageButton();
         };
 
         isTweening = true;
@@ -129,4 +144,28 @@ public class MissionManager : MonoBehaviour
             return null;
         }
     }
+
+    void UpdatePageButton()
+    {
+        //Debug.Log("missionpage_preview_index: " + missionpage_preview_index);
+        if (missionpage_preview_index <= 0)
+        {
+            btn_prev_cg.alpha = 0.5f;
+        }
+        else
+        {
+            btn_prev_cg.alpha = 1f;
+        }
+
+
+        if (missionpage_preview_index >= missionpage_preview_max)
+        {
+            btn_next_cg.alpha = 0.5f;
+        }
+        else
+        {
+            btn_next_cg.alpha = 1f;
+        }
+    }
+
 }
