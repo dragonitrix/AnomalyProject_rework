@@ -28,4 +28,15 @@ public class MissionPage : MonoBehaviour
         isFinished = true;
         manager.OnCurrentPageFinished();
     }
+
+    public virtual void OnEnterPreview()
+    {
+
+    }
+
+    public virtual void OnExitPreview()
+    {
+
+    }
+
 }

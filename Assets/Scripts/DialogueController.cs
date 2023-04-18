@@ -22,6 +22,12 @@ public class DialogueController : MonoBehaviour
         SetInteractable(false);
     }
 
+    public virtual void InitDialogue(DialogueSet dialogueSet)
+    {
+        this.dialogueSet = dialogueSet;
+        InitDialogue();
+    }
+
     public virtual void StartDialogue()
     {
         Debug.Log("StartDialogue");

@@ -16,10 +16,14 @@ public class MissionPage_question_choice : MonoBehaviour,IPointerEnterHandler,IP
 
     public int index;
 
+    public Color tintColor = new Color(91f / 225f, 95f / 255f, 210f / 255f);
+
+    Color textMeshColor_origin;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        textMeshColor_origin = textMesh.color;
     }
 
     // Update is called once per frame
@@ -36,13 +40,15 @@ public class MissionPage_question_choice : MonoBehaviour,IPointerEnterHandler,IP
     public void OnPointerEnter(PointerEventData eventData)
     {
         //throw new System.NotImplementedException();
-        image.color = new Color(91f / 225f, 95f / 255f, 210f / 255f);
+        image.color = tintColor;
+        textMesh.color = Color.white;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //throw new System.NotImplementedException();
-        image.color = new Color(1, 1, 1);
+        image.color = Color.white;
+        textMesh.color = textMeshColor_origin;
     }
     public void OnPointerClick(PointerEventData eventData)
     {

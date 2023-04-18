@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DigitalRuby.Tween;
+using UnityEditor.Tilemaps;
+using static UnityEngine.GraphicsBuffer;
+using System.Reflection;
 
 public class MissionManager : MonoBehaviour
 {
@@ -20,6 +23,11 @@ public class MissionManager : MonoBehaviour
     [Header("UI")]
     public CanvasGroup btn_prev_cg;
     public CanvasGroup btn_next_cg;
+
+    public GameObject indicatorSmall_prefab;
+    public RectTransform indicatorGroup;
+    public RectTransform indicatorMain;
+
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +53,14 @@ public class MissionManager : MonoBehaviour
         {
             item.manager = this;
             item.InitPage();
+            Instantiate(indicatorSmall_prefab, indicatorGroup);
         }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(indicatorGroup);
+
+        var target = indicatorGroup.GetChild(0).GetComponent<RectTransform>().localPosition;
+        target.y = 0;
+        indicatorMain.anchoredPosition = target;
     }
 
     public void StartMission()
@@ -89,14 +104,20 @@ public class MissionManager : MonoBehaviour
     {
         if (isTweening) return;
         if (missionpage_preview_index <= 0) return;
-        missionpage_preview_index--;
-        MoveToCurrentPreview();
+        MoveTo(missionpage_preview_index - 1);
     }
     public void MoveNext()
     {
         if (isTweening) return;
         if (missionpage_preview_index >= missionpage_preview_max) return;
-        missionpage_preview_index++;
+        MoveTo(missionpage_preview_index + 1);
+    }
+
+    public void MoveTo(int index)
+    {
+        GetCurrentPreviewPage().OnExitPreview();
+        missionpage_preview_index = index;
+        MoveIndicator(index);
         MoveToCurrentPreview();
     }
 
@@ -124,6 +145,7 @@ public class MissionManager : MonoBehaviour
         System.Action<ITween<Vector2>> onComplete = (t) =>
         {
             isTweening = false;
+            GetCurrentPreviewPage().OnEnterPreview();
             UpdatePageButton();
         };
 
@@ -136,13 +158,44 @@ public class MissionManager : MonoBehaviour
     {
         if (missionpage_index >= 0 && missionpage_index < missionPages.Count)
         {
-            Debug.Log("??");
             return missionPages[missionpage_index];
         }
         else
         {
             return null;
         }
+    }
+
+    protected MissionPage GetCurrentPreviewPage()
+    {
+        if (missionpage_preview_index >= 0 && missionpage_preview_index < missionPages.Count)
+        {
+            return missionPages[missionpage_preview_index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void MoveIndicator(int index)
+    {
+        var target = indicatorGroup.GetChild(index).GetComponent<RectTransform>().localPosition;
+        target.y = 0;
+
+        Debug.Log(target);
+
+        System.Action<ITween<Vector2>> onUpdate = (t) =>
+        {
+            indicatorMain.anchoredPosition = t.CurrentValue;
+        };
+
+        System.Action<ITween<Vector2>> onComplete = (t) =>
+        {
+            indicatorMain.anchoredPosition = t.CurrentValue;
+        };
+
+        gameObject.Tween("indicatorTween", indicatorMain.anchoredPosition, target, 0.5f, TweenScaleFunctions.QuadraticEaseOut, onUpdate, onComplete);
     }
 
     void UpdatePageButton()

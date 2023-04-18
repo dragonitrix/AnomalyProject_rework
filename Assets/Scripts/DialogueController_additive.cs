@@ -11,6 +11,7 @@ public class DialogueController_additive : DialogueController
     public RectTransform dialogue_panel_content;
     public HorizontalOrVerticalLayoutGroup layoutGroup;
 
+    public bool resize = true;
 
     //private void Start()
     //{
@@ -43,6 +44,7 @@ public class DialogueController_additive : DialogueController
 
     void Resize(bool jumptolast = false)
     {
+        if (!resize) return;
         StartCoroutine(_resize(jumptolast));
     }
     IEnumerator _resize(bool jumptolast)

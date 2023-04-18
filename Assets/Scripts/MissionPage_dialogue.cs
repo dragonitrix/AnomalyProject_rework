@@ -7,10 +7,12 @@ public class MissionPage_dialogue : MissionPage
 
     public DialogueController controller;
 
+    public DialogueSet dialogueSet;
+
     public override void InitPage()
     {
         base.InitPage();
-        controller.InitDialogue();
+        controller.InitDialogue(dialogueSet);
         controller.onDialogueFinished += OnDialogueFinished;
     }
 
