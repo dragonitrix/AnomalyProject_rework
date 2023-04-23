@@ -24,10 +24,7 @@ public class MissionManager : MonoBehaviour
     public CanvasGroup btn_prev_cg;
     public CanvasGroup btn_next_cg;
 
-    public GameObject indicatorSmall_prefab;
-    public RectTransform indicatorGroup;
-    public RectTransform indicatorMain;
-
+    public PageIndicatorController pageIndicator;
 
     // Start is called before the first frame update
     void Start()
@@ -53,14 +50,10 @@ public class MissionManager : MonoBehaviour
         {
             item.manager = this;
             item.InitPage();
-            Instantiate(indicatorSmall_prefab, indicatorGroup);
         }
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(indicatorGroup);
+        pageIndicator.InitIndicator(missionPages.Count);
 
-        var target = indicatorGroup.GetChild(0).GetComponent<RectTransform>().localPosition;
-        target.y = 0;
-        indicatorMain.anchoredPosition = target;
     }
 
     public void StartMission()
@@ -125,7 +118,7 @@ public class MissionManager : MonoBehaviour
     {
         GetCurrentPreviewPage().OnExitPreview();
         missionpage_preview_index = index;
-        MoveIndicator(index);
+        pageIndicator.MoveIndicator(index);
         MoveToCurrentPreview();
     }
 
@@ -186,23 +179,6 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-    public void MoveIndicator(int index)
-    {
-        var target = indicatorGroup.GetChild(index).GetComponent<RectTransform>().localPosition;
-        target.y = 0;
-
-        System.Action<ITween<Vector2>> onUpdate = (t) =>
-        {
-            indicatorMain.anchoredPosition = t.CurrentValue;
-        };
-
-        System.Action<ITween<Vector2>> onComplete = (t) =>
-        {
-            indicatorMain.anchoredPosition = t.CurrentValue;
-        };
-
-        gameObject.Tween("indicatorTween", indicatorMain.anchoredPosition, target, 0.5f, TweenScaleFunctions.QuadraticEaseOut, onUpdate, onComplete);
-    }
 
     void UpdatePageButton()
     {

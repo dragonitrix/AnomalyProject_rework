@@ -20,28 +20,10 @@ public class GameSceneManager : MonoBehaviour
         }
     }
 
-    public Animator transitionAnim;
-
-    public float transtitionTime = 1.0f;
-
-    public bool transitionOnLoaded = true;
-
-    public CanvasGroup transitionCanvasGroup;
-
-    private void OnLevelWasLoaded(int level)
-    {
-        if (transitionOnLoaded)
-        {
-            transitionAnim.SetTrigger("Out");
-        }
-    }
+    public float transtitionTime = 0;
 
     private void Start()
     {
-        if (transitionOnLoaded)
-        {
-            transitionAnim.SetTrigger("Out");
-        }
         
     }
 
@@ -62,14 +44,12 @@ public class GameSceneManager : MonoBehaviour
 
     IEnumerator _JumptoScene(int index)
     {
-        transitionAnim.SetTrigger("In");
         yield return new WaitForSeconds(transtitionTime);
         SceneManager.LoadScene(index);
     }
 
     IEnumerator _JumptoScene(string name)
     {
-        transitionAnim.SetTrigger("In");
         yield return new WaitForSeconds(transtitionTime);
         SceneManager.LoadScene(name);
     }
@@ -81,7 +61,6 @@ public class GameSceneManager : MonoBehaviour
 
     IEnumerator _LoadSceneAdditive(string name)
     {
-        transitionAnim.SetTrigger("In");
         yield return new WaitForSeconds(transtitionTime);
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
     }
@@ -92,7 +71,6 @@ public class GameSceneManager : MonoBehaviour
     }
     IEnumerator _UnloadScene(string name,Action callback)
     {
-        transitionAnim.SetTrigger("Out");
         yield return new WaitForSeconds(transtitionTime);
         SceneManager.UnloadSceneAsync(name);
         callback();
