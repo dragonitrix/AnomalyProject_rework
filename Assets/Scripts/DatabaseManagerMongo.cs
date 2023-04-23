@@ -281,7 +281,7 @@ public class DatabaseManagerMongo : MonoBehaviour
             form.AddField("playerAnswer", json);
 
             yield return _SendWebRequest(uri, form, (data) => {
-                Debug.Log(data);
+                //Debug.Log(data);
             });
         }
         callback("update complete");

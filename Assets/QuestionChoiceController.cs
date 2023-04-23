@@ -11,15 +11,15 @@ public class QuestionChoiceController : MonoBehaviour
     public CanvasGroup canvasGroup;
     public Button button;
 
-    public QuestionTestManager manager;
+    public QuestionPageController controller;
 
     private void Start()
     {
         button.onClick.AddListener(OnClick);
     }
-    public void InitChoice(QuestionTestManager manager,int index)
+    public void InitChoice(QuestionPageController controller,int index)
     {
-        this.manager = manager;
+        this.controller = controller;
         this.index = index;
     }
     public void SetChoice(string text)
@@ -28,14 +28,20 @@ public class QuestionChoiceController : MonoBehaviour
         canvasGroup.ShowAll();
     }
 
-    public void DisableChoice()
+    public void HideChoice()
     {
         canvasGroup.HideAll();
     }
 
+    public void DisableChoice()
+    {
+        //canvasGroup.HideAll();
+        canvasGroup.interactable = false;
+    }
+
     public void OnClick()
     {
-        manager.OnChoiceClick(index);
+        controller.OnChoiceClick(index);
     }
 
 }

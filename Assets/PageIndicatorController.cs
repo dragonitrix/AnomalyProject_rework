@@ -13,6 +13,11 @@ public class PageIndicatorController : MonoBehaviour
 
     public void InitIndicator(int page)
     {
+        foreach (Transform indicator in indicatorGroup)
+        {
+            Destroy(indicator.gameObject);
+        }
+
         for (int i = 0; i < page; i++)
         {
             Instantiate(indicatorSmall_prefab, indicatorGroup);

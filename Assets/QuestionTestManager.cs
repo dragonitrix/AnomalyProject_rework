@@ -1,34 +1,40 @@
+using DigitalRuby.Tween;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuestionTestManager : MonoBehaviour
 {
 
+    public GameObject page_prefab;
+    public GameObject resultDetail_prefab;
+
     public int batchCount = 5;
 
     public List<QuestionData> currentQuestions = new List<QuestionData>();
-
     public List<Answer> currentAnswer = new List<Answer>();
 
     public int currentQuestionIndex = 0;
+    public int question_preview_index = 0;
+    public int question_preview_max = 0;
+    public bool isTweening = false;
 
-    public TextMeshProUGUI questionText;
+    public RectTransform pageGroup;
+    public RectTransform resultPage;
+    public RectTransform resultContent;
+    public List<QuestionPageController> pages = new List<QuestionPageController>();
 
-    public List<QuestionChoiceController> questionChoices = new List<QuestionChoiceController>();
+    [Header("UI")]
+    public CanvasGroup btn_prev_cg;
+    public CanvasGroup btn_next_cg;
 
-
-
+    public PageIndicatorController pageIndicator;
 
     public void InitTest()
     {
-
-        for (int i = 0; i < questionChoices.Count; i++)
-        {
-            questionChoices[i].InitChoice(this,i);
-        }
-
         NewBatch();
     }
 
@@ -54,37 +60,38 @@ public class QuestionTestManager : MonoBehaviour
         }
 
         currentQuestionIndex = 0;
-        SetQuestion();
+        question_preview_index = 0;
+        question_preview_max = 0;
+        //SetQuestion();
+
+        for (int i = 0; i < pages.Count; i++)
+        {
+            Destroy(pages[i].gameObject);
+        }
+        pages.Clear();
+
+        for (int i = 0; i < currentQuestions.Count; i++)
+        {
+            var clone = Instantiate(page_prefab, pageGroup);
+            var page = clone.GetComponent<QuestionPageController>();
+            page.InitQuestionPage(this);
+            page.SetQuestion(currentQuestions[i]);
+            pages.Add(page);
+        }
+
+        resultPage.SetAsLastSibling();
+
+        pageGroup.sizeDelta = new Vector2(
+            1920 * pageGroup.transform.childCount,
+            pageGroup.sizeDelta.y
+            );
+
+        pageIndicator.InitIndicator(pages.Count + 1);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(pageGroup);
+        MoveTo(0);
 
         //currentAnswer.Clear();
 
-    }
-
-    public void SetQuestion()
-    {
-        var question = currentQuestions[currentQuestionIndex];
-        questionText.text = question.question;
-
-        //switch (question.type)
-        //{
-        //    case QuestionData.Type._0_truefalse:
-        //        break;
-        //    case QuestionData.Type._1_multichoice:
-        //    case QuestionData.Type._2_filling:
-        //        break;
-        //}
-        for (int i = 0; i < question.choices.Count; i++)
-        {
-            var choice = question.choices[i];
-            if (choice != "")
-            {
-                questionChoices[i].SetChoice(question.choices[i]);
-            }
-            else
-            {
-                questionChoices[i].DisableChoice();
-            }
-        }
     }
 
     public void NextQuestion()
@@ -92,7 +99,8 @@ public class QuestionTestManager : MonoBehaviour
         if (currentQuestionIndex < batchCount - 1)
         {
             currentQuestionIndex++;
-            SetQuestion();
+            if (question_preview_max < currentQuestionIndex) question_preview_max = currentQuestionIndex;
+            MoveNext();
         }
         else
         {
@@ -103,19 +111,56 @@ public class QuestionTestManager : MonoBehaviour
     public void OnTestFinished()
     {
 
-        foreach (var item in questionChoices)
+        //foreach (var item in questionChoices)
+        //{
+        //    item.DisableChoice();
+        //}
+
+        question_preview_max += 1;
+
+        foreach(Transform t in resultContent)
         {
-            item.DisableChoice();
+            Destroy(t.gameObject);
         }
 
-        //update player's answer to database
-        GameManager.instance.UpdatePlayerAnswers(currentAnswer, (data) => {
-            currentAnswer.Clear();
-            Debug.Log("new batch");
-            NewBatch();
+        for (int i = 0; i < currentQuestions.Count; i++)
+        {
+            var clone = Instantiate(resultDetail_prefab, resultContent);
+            var resultDetail = clone.GetComponent<QuestionResultDetail>();
+            resultDetail.InitResult(this, i);
+            resultDetail.SetCorrect(currentAnswer[i].isCorrected, currentQuestions[i].question);
+        }
+
+        MoveNext(() =>
+        {
+            //update player's answer to database
+            GameManager.instance.UpdatePlayerAnswers(currentAnswer, (data) =>
+            {
+                currentAnswer.Clear();
+                //Debug.Log("new batch");
+                //NewBatch();
+                ShowResult();
+            });
         });
 
     }
+
+    public void ShowResult()
+    {
+
+    }
+
+    public void OnBackToMenu()
+    {
+        GameSceneManager.instance.JumptoScene("sc_mainmenu_test");
+    }
+
+    public void OnContinue()
+    {
+        Debug.Log("new batch");
+        NewBatch();
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -149,4 +194,104 @@ public class QuestionTestManager : MonoBehaviour
         NextQuestion();
     }
 
+    public void MovePrev()
+    {
+        MovePrev(() => { });
+    }
+    public void MoveNext()
+    {
+        MoveNext(() => { });
+    }
+
+    public void MovePrev(System.Action callback)
+    {
+        if (isTweening) return;
+        if (question_preview_index <= 0) return;
+        MoveTo(question_preview_index - 1, callback);
+    }
+    public void MoveNext(System.Action callback)
+    {
+        if (isTweening) return;
+        if (question_preview_index >= question_preview_max) return;
+        MoveTo(question_preview_index + 1, callback);
+    }
+
+    public void MoveTo(int index)
+    {
+        MoveTo(index, () => { });
+    }
+
+    public void MoveTo(int index, System.Action callback)
+    {
+        question_preview_index = index;
+        pageIndicator.MoveIndicator(index);
+        MoveToCurrentPreview(callback);
+    }
+
+    public void MoveToCurrentPreview(System.Action callback)
+    {
+
+        if (isTweening) return;
+
+        var screenWidth = 1920;
+        //missionPanel.anchoredPosition = new Vector2(
+        //    question_preview_index * -screenWidth,
+        //    missionPanel.anchoredPosition.y
+        //    );
+
+        var target = new Vector2(
+            question_preview_index * -screenWidth,
+            pageGroup.anchoredPosition.y
+            );
+
+        System.Action<ITween<Vector2>> onUpdate = (t) =>
+        {
+            pageGroup.anchoredPosition = t.CurrentValue;
+        };
+
+        System.Action<ITween<Vector2>> onComplete = (t) =>
+        {
+            isTweening = false;
+            UpdatePageButton();
+            callback();
+        };
+
+        isTweening = true;
+
+        gameObject.Tween(null, pageGroup.anchoredPosition, target, 0.5f, TweenScaleFunctions.QuadraticEaseOut, onUpdate, onComplete);
+    }
+
+    protected QuestionPageController GetCurrentPreviewPage()
+    {
+        if (question_preview_index >= 0 && question_preview_index < pages.Count)
+        {
+            return pages[question_preview_index];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    void UpdatePageButton()
+    {
+        if (question_preview_index <= 0)
+        {
+            btn_prev_cg.alpha = 0.5f;
+        }
+        else
+        {
+            btn_prev_cg.alpha = 1f;
+        }
+
+
+        if (question_preview_index >= question_preview_max)
+        {
+            btn_next_cg.alpha = 0.5f;
+        }
+        else
+        {
+            btn_next_cg.alpha = 1f;
+        }
+    }
 }
