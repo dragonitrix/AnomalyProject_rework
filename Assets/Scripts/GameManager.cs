@@ -34,4 +34,12 @@ public class GameManager : MonoBehaviour
         loadOverlay.HideAll();
     }
 
+    public List<QuestionData> questionDatas = new List<QuestionData>();
+
+    public void PullAllQuestion()
+    {
+        DatabaseManagerMongo.instance.FetchAllQuestion();
+    }
+
+
 }

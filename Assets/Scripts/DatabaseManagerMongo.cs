@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -64,43 +65,17 @@ public class DatabaseManagerMongo : MonoBehaviour
         }
     }
 
-    public delegate void onRegisSuccessDelegate();
-    public onRegisSuccessDelegate onRegisSuccessCallback;
-
-    public delegate void onLoginSuccessDelegate();
-    public onLoginSuccessDelegate onLoginSuccessCallback;
-
-    public delegate void onRegisFailDelegate();
-    public onRegisFailDelegate onRegisFailCallback;
-
-    public delegate void onLoginFailDelegate();
-    public onLoginFailDelegate onLoginFailCallback;
-
-
-    public void Register(string email, string password, string name)
+    public string SendWebRequest(string uri, WWWForm form)
     {
-        Debug.Log("start register");
-        GameManager.instance.ShowLoadOverlay();
-        StartCoroutine(_RegisterCoroutine(email, password, name));
+        var result = "";
+        StartCoroutine(_SendWebRequest(uri, form, (string _result) => { _result = result; }));
+        return result;
     }
-
-    IEnumerator _RegisterCoroutine(string email, string password, string name)
+    IEnumerator _SendWebRequest(string uri, WWWForm form, System.Action<string> callback)
     {
-        password = SecureHelper.HashSalt(password, _passwordSalt);
-
-        //string query = $"?email={email}&password={password}&name={name}";
-
-        var uri = endpoint + "/register";
-
-        //Debug.Log(uri);
-
-        WWWForm form = new WWWForm();
-        form.AddField("email", email);
-        form.AddField("password", password);
-        form.AddField("name", name);
+        Debug.Log("_SendWebRequest");
 
         UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
         var handler = webRequest.SendWebRequest();
 
         float startTime = 0.0f;
@@ -109,6 +84,8 @@ public class DatabaseManagerMongo : MonoBehaviour
             startTime += Time.deltaTime;
             if (startTime > timeoutDuration)
             {
+                Debug.Log("timeout");
+                callback(null);
                 break;
             }
             yield return null;
@@ -116,420 +93,64 @@ public class DatabaseManagerMongo : MonoBehaviour
 
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
-            //RawAccount account;
-            try
-            {
-                //Debug.Log(webRequest.downloadHandler.text);
-                //account = JsonConvert.DeserializeObject<RawAccount>(webRequest.downloadHandler.text);
-                PlayerInfoManager.instance.account.id = webRequest.downloadHandler.text;
-                PlayerInfoManager.instance.account.email = email;
-
-                PlayerInfoManager.instance.info.nickname = name;
-
-                Debug.Log("regis success id: " + PlayerInfoManager.instance.account.id);
-                OnRegisSuccess();
-            }
-            catch (Exception)
-            {
-                OnRegisFail();
-                yield break;
-            }
+            callback(webRequest.downloadHandler.text);
         }
         else
         {
-            Debug.Log(webRequest.downloadHandler.text);
-            OnRegisFail();
+            Debug.Log("fail");
+            callback(null);
         }
-
     }
 
-    public void Login(string email, string password)
+    public void FetchAllQuestion()
     {
-        GameManager.instance.ShowLoadOverlay();
-        StartCoroutine(LoginCoroutine(email, password));
+        StartCoroutine(_FetchAllQuestion());
     }
 
-    IEnumerator LoginCoroutine(string email, string password)
+    IEnumerator _FetchAllQuestion()
     {
-        //string query = $"?email={email}&password={password}";
-
-        var uri = endpoint + "/login";
-
+        var uri = endpoint + "/getQuestionIDs";
         WWWForm form = new WWWForm();
-        form.AddField("email", email);
-        form.AddField("password", password);
+        form.AddField("dimension", 1);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
 
-        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
-        var handler = webRequest.SendWebRequest();
-
-        float startTime = 0.0f;
-        while (!handler.isDone)
+        if (result == null)
         {
-            startTime += Time.deltaTime;
-            if (startTime > timeoutDuration)
-            {
-                break;
-            }
-            yield return null;
+            Debug.Log("FAIL");
+            yield break;
         }
 
-        if (webRequest.result == UnityWebRequest.Result.Success)
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        Debug.Log(idList.Count + " questions found on");
+
+        List<QuestionData> questionDatas = new List<QuestionData>();
+
+        var qURI = endpoint + "/getQuestion";
+        for (int i = 0; i < idList.Count; i++)
         {
-            //Debug.Log(webRequest.downloadHandler.text);
+            var id = idList[i];
+            Debug.Log("id: " + id);
 
-            RawAccount account = new RawAccount();
-            try
-            {
-                account = JsonConvert.DeserializeObject<RawAccount>(webRequest.downloadHandler.text);
-            }
-            catch (Exception)
-            {
-                Debug.Log("DeserializeObject failled");
-                OnLoginFail();
-                yield break;
-            }
+            WWWForm qform = new WWWForm();
+            qform.AddField("id", id);
+            string q = null;
+            yield return _SendWebRequest(qURI, qform, (string _result) => { q = _result; });
 
-            if (ValidatePassword(password, account.password))
+            if (q != null)
             {
-                PlayerInfoManager.instance.account.id = account.id;
-                Debug.Log("login success");
-                StartCoroutine(RetrivePlayerData(account.id, OnLoginSuccess));
-                //OnLoginSuccess();
-            }
-            else
-            {
-                Debug.Log("validation failled");
-                OnLoginFail();
+                Debug.Log(q);
+                var question = JsonConvert.DeserializeObject<QuestionData>(q);
+                questionDatas.Add(question);
             }
         }
-        else
-        {
-            //Debug.Log(webRequest.downloadHandler.text);
-            OnLoginFail();
-        }
-    }
 
-    IEnumerator RetrivePlayerData(string id, UnityAction callback)
-    {
-        Debug.Log("start RetrivePlayerData");
-
-        float startTime;
-
-        //string query = $"?email={email}";
-        var uri = endpoint + "/getPlayerInfo";
-
-        WWWForm form = new WWWForm();
-        form.AddField("id", id);
-
-        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
-        var handler = webRequest.SendWebRequest();
-
-        startTime = 0.0f;
-        while (!handler.isDone)
-        {
-            startTime += Time.deltaTime;
-            if (startTime > timeoutDuration)
-            {
-                break;
-            }
-            yield return null;
-        }
-
-        //Debug.Log(webRequest.downloadHandler.text);
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            try
-            {
-                PlayerInfo info = new PlayerInfo();
-                info = JsonConvert.DeserializeObject<PlayerInfo>(webRequest.downloadHandler.text);
-                PlayerInfoManager.instance.info = info;
-                callback();
-            }
-            catch (Exception)
-            {
-                Debug.Log("DeserializeObject fail");
-            }
-        }
-        else
-        {
-
-            Debug.Log("request data fail");
-        }
-
-
-    }
-
-    public void OnRegisSuccess()
-    {
-        Debug.Log("regis success");
-        GameManager.instance.HideLoadOverlay();
-        isLoggedin = true;
-        onRegisSuccessCallback();
-    }
-    public void OnRegisFail()
-    {
-        Debug.Log("regis fail");
-        GameManager.instance.HideLoadOverlay();
-        onRegisFailCallback();
-    }
-    public void OnLoginSuccess()
-    {
-        Debug.Log("login success");
-        GameManager.instance.HideLoadOverlay();
-        isLoggedin = true;
-        onLoginSuccessCallback();
-    }
-    public void OnLoginFail()
-    {
-        Debug.Log("login fail");
-        GameManager.instance.HideLoadOverlay();
-        onLoginFailCallback();
-    }
-
-    private static string _passwordSalt = "anmly";
-
-    private bool ValidatePassword(string _password, string _passwordHash)
-    {
-        var passwordHash = SecureHelper.HashSalt(_password, _passwordSalt);
-
-        return passwordHash == _passwordHash;
-    }
-
-
-    public void RequestPoolID(int dimension, UnityAction callback)
-    {
-        StartCoroutine(RequestPoolIDCoroutine(dimension, callback));
-    }
-
-    IEnumerator RequestPoolIDCoroutine(int dimension, UnityAction callback)
-    {
-
-        Debug.Log("start RequestPoolIDCoroutine: " + dimension);
-
-        //string query = $"?email={email}";
-        var uri = endpoint + "/getQuestionID";
-
-        WWWForm form = new WWWForm();
-        form.AddField("dimension", dimension);
-
-        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
-        var handler = webRequest.SendWebRequest();
-
-        float startTime;
-        startTime = 0.0f;
-        while (!handler.isDone)
-        {
-            startTime += Time.deltaTime;
-            if (startTime > timeoutDuration)
-            {
-                break;
-            }
-            yield return null;
-        }
-
-        //Debug.Log(webRequest.downloadHandler.text);
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            List<string> q_ids = new List<string>();
-            try
-            {
-                //count = Int32.Parse(webRequest.downloadHandler.text);
-
-                q_ids = JsonConvert.DeserializeObject<List<string>>(webRequest.downloadHandler.text);
-                //QuestionManager.instance.questionPool_IDs = q_ids;
-            }
-            catch (Exception)
-            {
-                Debug.Log("DeserializeObject fail");
-            }
-
-            if (q_ids.Count > 0)
-            {
-                var uri2 = endpoint + "/getQuestion";
-
-                for (int i = 0; i < q_ids.Count; i++)
-                {
-
-                    WWWForm form2 = new WWWForm();
-                    //form2.AddField("dimension", dimension);
-                    form2.AddField("id", q_ids[i]);
-
-                    UnityWebRequest webRequest2 = UnityWebRequest.Post(uri2, form2);
-
-                    var handler2 = webRequest2.SendWebRequest();
-
-                    startTime = 0.0f;
-                    while (!handler2.isDone)
-                    {
-                        startTime += Time.deltaTime;
-                        if (startTime > timeoutDuration)
-                        {
-                            break;
-                        }
-                        yield return null;
-                    }
-
-                    if (webRequest2.result == UnityWebRequest.Result.Success)
-                    {
-                        try
-                        {
-                            QuestionData questionData = JsonConvert.DeserializeObject<QuestionData>(webRequest2.downloadHandler.text);
-
-                            //Debug.Log($"question {questionData.id} deserial success");
-
-                            //QuestionManager.instance.questionPool.Add(questionData);
-                        }
-                        catch (Exception)
-                        {
-                            Debug.Log("question deserial fail");
-                        }
-
-                    }
-                    else
-                    {
-                        Debug.Log("request fail");
-                        yield break;
-                    }
-                }
-
-                callback();
-
-            }
-            else
-            {
-                Debug.Log("no q_dis");
-            }
-        }
-        else
-        {
-            Debug.Log("request data fail");
-        }
-    }
-
-    public void UpdatePlayerAnswer(Answer answer)
-    {
-        StartCoroutine(UpdatePlayerAnswerCoroutine(answer));
-    }
-
-    IEnumerator UpdatePlayerAnswerCoroutine(Answer answer)
-    {
-
-        var uri = endpoint + "/UpdatePlayerAnswer";
-
-        //Debug.Log(uri);
-
-        WWWForm form = new WWWForm();
-        form.AddField("id", PlayerInfoManager.instance.CurrentPlayerId);
-        form.AddField("answer", JsonConvert.SerializeObject(answer));
-
-        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
-        var handler = webRequest.SendWebRequest();
-
-        float startTime = 0.0f;
-        while (!handler.isDone)
-        {
-            startTime += Time.deltaTime;
-            if (startTime > timeoutDuration)
-            {
-                break;
-            }
-            yield return null;
-        }
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            //Debug.Log("update answer success");
-        }
-        else
-        {
-            //Debug.Log("update answer fail");
-        }
-
-    }
-
-    public delegate void FetchPlayerScoreDelegate(List<SimpleScore> simpleScores);
-    public FetchPlayerScoreDelegate OnFetchPlayerScoreComplete;
-
-    public void FetchPlayerScore()
-    {
-        StartCoroutine(FetchPlayerScoreCoroutine());
-    }
-
-    IEnumerator FetchPlayerScoreCoroutine()
-    {
-
-        GameManager.instance.ShowLoadOverlay();
-
-        var uri = endpoint + "/fetchPlayerScore";
-
-        //Debug.Log(uri);
-
-        WWWForm form = new WWWForm();
-        form.AddField("id", PlayerInfoManager.instance.CurrentPlayerId);
-
-        UnityWebRequest webRequest = UnityWebRequest.Post(uri, form);
-
-        var handler = webRequest.SendWebRequest();
-
-        float startTime = 0.0f;
-        while (!handler.isDone)
-        {
-            startTime += Time.deltaTime;
-            if (startTime > timeoutDuration)
-            {
-                break;
-            }
-            yield return null;
-        }
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            try
-            {
-                List<SimpleScore> simpleScores = JsonConvert.DeserializeObject<List<SimpleScore>>(webRequest.downloadHandler.text);
-                OnFetchPlayerScoreComplete(simpleScores);
-                GameManager.instance.HideLoadOverlay();
-                OnFetchPlayerScoreComplete = (List<SimpleScore> simpleScores) => { };
-            }
-            catch (Exception)
-            {
-                Debug.Log("desereallize fail");
-            }
-        }
-        else
-        {
-            Debug.Log("request fail");
-        }
+        //foreach (var item in questionDatas)
+        //{
+        //    item.Log();
+        //}
 
     }
 }
 
-
-
-[Serializable]
-public class RawAccount
-{
-    public string id;
-    public string email;
-    public string password;
-}
-
-[Serializable]
-public class PlayerData
-{
-    public PlayerInfo playerInfo;
-    public PlayerScore playerScore;
-}
-
-[Serializable]
-public class SimpleScore
-{
-    public int correct;
-    public int total;
-}

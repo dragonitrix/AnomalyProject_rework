@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b95266ce79b3f3140896aa39cf3f2114, type: 3}
-  m_Name: Database Endpoint
+  m_Script: {fileID: 11500000, guid: f0c0b48fabfa4ad4eb1e5a3679c6283f, type: 3}
+  m_Name: New Database Endpoint
   m_EditorClassIdentifier: 
   dev: http://localhost:20201/api
   production: https://digilern.camt.cmu.ac.th/api

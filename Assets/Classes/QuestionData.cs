@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 [Serializable]
 public class QuestionData
@@ -43,6 +44,19 @@ public class QuestionData
         _0_truefalse,
         _1_multichoice,
         _2_filling
+    }
+    public void Log()
+    {
+        Debug.Log("id: " + id);
+        Debug.Log("type: " + type);
+        Debug.Log("dimension: " + dimension);
+        Debug.Log("question: " + question);
+        for (int i = 0; i < choices.Count; i++)
+        {
+            Debug.Log("choice " + i + " : " + choices[i]);
+        }
+        Debug.Log("answer: " + answer);
+        Debug.Log("weight: " + weight);
     }
 
 }

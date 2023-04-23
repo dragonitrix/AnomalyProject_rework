@@ -67,6 +67,14 @@ public class MissionManager : MonoBehaviour
     {
         Debug.Log("StartMission");
         missionpage_index = 0;
+
+        var target = new Vector2(
+            0,
+            missionPanel.anchoredPosition.y
+            );
+
+        missionPanel.anchoredPosition = target;
+
         SetCurrentMissionPage();
     }
 
@@ -182,8 +190,6 @@ public class MissionManager : MonoBehaviour
     {
         var target = indicatorGroup.GetChild(index).GetComponent<RectTransform>().localPosition;
         target.y = 0;
-
-        Debug.Log(target);
 
         System.Action<ITween<Vector2>> onUpdate = (t) =>
         {

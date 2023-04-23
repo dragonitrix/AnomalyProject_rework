@@ -181,6 +181,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   isFinished: 0
   controller: {fileID: 6869361316584758576}
+  dialogueSet: {fileID: 0}
 --- !u!1001 &8843891890118563447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2733420446688054090, guid: bde9ee702bfaa574893ad7deae3ddec8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1019.35
+      value: 903.81
       objectReference: {fileID: 0}
     - target: {fileID: 2733420446688054090, guid: bde9ee702bfaa574893ad7deae3ddec8, type: 3}
       propertyPath: m_LocalPosition.x
