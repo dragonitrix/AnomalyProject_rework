@@ -36,6 +36,8 @@ public class QuestionPageController : MonoBehaviour
 
     public void SetQuestion(QuestionData question)
     {
+        question.RefineQuestion();
+
         questionText.text = question.question;
 
         //switch (question.type)

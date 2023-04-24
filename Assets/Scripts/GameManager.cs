@@ -59,24 +59,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PullAllQuestion()
+    public void PrepareAndGoToQuestionScene(Dimension dimension)
     {
         //DatabaseManagerMongo.instance.FetchAllQuestion(1, (data) => { Debug.Log(data.Count); });
         //DatabaseManagerMongo.instance.FetchUnansweredQuestion(1);
+        Debug.Log("PrepareAndGoToQuestionScene: " + dimension);
         ShowLoadOverlay(LoadOverlayType._BIG);
-        DatabaseManagerMongo.instance.FetchUnansweredQuestion(1,(all,unanswered) => {
+        DatabaseManagerMongo.instance.FetchUnansweredQuestion((int)dimension, (all, unanswered) =>
+        {
             QuestionPool.instance.questions_all = all;
             QuestionPool.instance.questions_unanswered = unanswered;
             QuestionPool.instance.questions_unanswered.Shuffle();
             HideLoadOverlay(LoadOverlayType._ALL);
-            GameSceneManager.instance.JumptoScene("sc_question_test");
+            GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_question);
         });
     }
 
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
         ShowLoadOverlay(LoadOverlayType._SMALL);
-        DatabaseManagerMongo.instance.UpdatePlayerAnswers(answers, (data) => {
+        DatabaseManagerMongo.instance.UpdatePlayerAnswers(answers, (data) =>
+        {
             callback(data);
             HideLoadOverlay(LoadOverlayType._SMALL);
         });

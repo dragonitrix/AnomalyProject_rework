@@ -20,6 +20,7 @@ public class HangmanController : MonoBehaviour
     public GameObject char_prefab;
     public GameObject key_prefab;
 
+    public CanvasGroup mainPanel;
     public CanvasGroup resultPanel;
     public CanvasGroup correctPanel;
     public CanvasGroup incorrectPanel;
@@ -27,14 +28,19 @@ public class HangmanController : MonoBehaviour
     Dictionary<string, HangmanKey> keys = new Dictionary<string, HangmanKey>();
     List<HangmanChar> chars = new List<HangmanChar>();
 
-    public delegate void OnHangmanGameFinished();
-    public OnHangmanGameFinished onHangmanGameFinished = () => { };
+    public delegate void OnHangmanGameFinished(bool result);
+    public OnHangmanGameFinished onHangmanGameFinished = (result) => { };
 
     int correctCount = 0;
     string nonDupe = "";
     public int health = 7;
 
     public HealthBar healthBar;
+
+    public int firstHint = 1;
+
+    bool result;
+
     public void InitHangmanGame()
     {
         //pick word
@@ -46,6 +52,25 @@ public class HangmanController : MonoBehaviour
 
         healthBar.InitHealthBar(health, health);
 
+        for (int i = 0; i < firstHint; i++)
+        {
+            Hint();
+        }
+
+        mainPanel.HideAll();
+
+    }
+
+    public void StartHangmanGame()
+    {
+        mainPanel.ShowAll();
+    }
+
+    public void Hint()
+    {
+        //hint
+        var hintchar = nonDupe[UnityEngine.Random.Range(0, nonDupe.Length)].ToString();
+        OnKeypadClick(hintchar);
     }
 
     void InitWord()
@@ -133,6 +158,7 @@ public class HangmanController : MonoBehaviour
         {
             character.Value.canvasGroup.interactable = false;
         }
+        this.result = result;
         ShowResult(result);
     }
 
@@ -144,7 +170,7 @@ public class HangmanController : MonoBehaviour
     public void OnResultClicked()
     {
         resultPanel.HideAll();
-        onHangmanGameFinished();
+        onHangmanGameFinished(this.result);
     }
 
     public void ShowResult(bool result)

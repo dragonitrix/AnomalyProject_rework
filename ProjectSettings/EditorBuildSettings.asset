@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/sc_mission_test.unity
     guid: 8e989d2d306091946b6449df24511e95
   - enabled: 1
-    path: Assets/Scenes/sc_question_test.unity
+    path: Assets/Scenes/sc_question.unity
     guid: e28430fa273a8964ab6312da45068433
   - enabled: 1
     path: Assets/Scenes/sc_core.unity

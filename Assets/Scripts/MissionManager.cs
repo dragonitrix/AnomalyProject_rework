@@ -10,6 +10,8 @@ using System.Reflection;
 
 public class MissionManager : MonoBehaviour
 {
+    public Dimension dimension;
+
     public RectTransform missionPanel;
 
     public List<MissionPage> missionPages = new List<MissionPage>();
@@ -20,11 +22,18 @@ public class MissionManager : MonoBehaviour
 
     public bool isTweening = false;
 
+    public int health_starting = 3;
+    public int health_current = 3;
+
+    public HealthBar health_bar;
+
     [Header("UI")]
     public CanvasGroup btn_prev_cg;
     public CanvasGroup btn_next_cg;
 
     public PageIndicatorController pageIndicator;
+
+    public CanvasGroup gameover_panel;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +42,9 @@ public class MissionManager : MonoBehaviour
         InitMissionPage();
         StartMission();
         UpdatePageButton();
+
+        health_current = health_starting;
+        health_bar.InitHealthBar(health_current, health_starting);
     }
 
     public void FetchPages()
@@ -82,7 +94,7 @@ public class MissionManager : MonoBehaviour
         }
         else
         {
-            OnFinished();
+            OnMissionFinished();
         }
     }
 
@@ -93,10 +105,35 @@ public class MissionManager : MonoBehaviour
 
     public void OnCurrentPageFinished()
     {
-        NextMissionPage();
+        if (health_current > 0)
+        {
+            NextMissionPage();
+        }
+        else
+        {
+            // game over
+            Gameover();
+        }
     }
 
-    public void OnFinished()
+    public void AddHealth(int amount)
+    {
+        health_current += amount;
+        health_bar.SetHealth(health_current);
+    }
+
+    public void DeductHealth(int amount)
+    {
+        health_current -= amount;
+        health_bar.SetHealth(health_current);
+    }
+
+    public void Gameover()
+    {
+        gameover_panel.ShowAll();
+    }
+
+    public void OnMissionFinished()
     {
         Debug.Log("mission finished");
     }
@@ -179,7 +216,6 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-
     void UpdatePageButton()
     {
         //Debug.Log("missionpage_preview_index: " + missionpage_preview_index);
@@ -201,6 +237,16 @@ public class MissionManager : MonoBehaviour
         {
             btn_next_cg.alpha = 1f;
         }
+    }
+
+    public void ToMainMenu()
+    {
+        GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
+    }
+
+    public void ToTest()
+    {
+        GameManager.instance.PrepareAndGoToQuestionScene(dimension);
     }
 
 }

@@ -152,7 +152,7 @@ public class QuestionTestManager : MonoBehaviour
 
     public void OnBackToMenu()
     {
-        GameSceneManager.instance.JumptoScene("sc_mainmenu_test");
+        GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
     }
 
     public void OnContinue()

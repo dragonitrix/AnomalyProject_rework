@@ -73,6 +73,8 @@ public class MissionPage_question : MissionPage
         var result = CheckAnswer(index);
         ShowResult(result);
 
+        if(!result) manager.DeductHealth(1);
+
     }
 
     bool CheckAnswer(int rawindex)
