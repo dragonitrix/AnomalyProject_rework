@@ -33,6 +33,17 @@ public class PlayerInfoManager : MonoBehaviour
 
     public string CurrentPlayerId { get { return account.id; } }
 
+    public void SetPlayerInfo(PlayerInfo info)
+    {
+        account.id = info.id;
+        this.info.id = info.id;
+        this.info.nickname = info.nickname;
+        this.info.fullname = info.fullname;
+        this.info.faculty = info.faculty;
+        this.info.uni = info.uni;
+
+
+    }
 
 }
 

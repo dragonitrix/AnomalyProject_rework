@@ -75,6 +75,34 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    public void GoToMission(Dimension dimension)
+    {
+        switch (dimension)
+        {
+            case Dimension._D1:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_1);
+                break;
+            case Dimension._D2:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_2);
+                break;
+            case Dimension._D3:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_3);
+                break;
+            case Dimension._D4:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_4);
+                break;
+            case Dimension._D5:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_5);
+                break;
+            case Dimension._D6:
+                GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mission_6);
+                break;
+            default:
+                break;
+        }
+
+    }
+
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
         ShowLoadOverlay(LoadOverlayType._SMALL);

@@ -111,6 +111,85 @@ public class DatabaseManagerMongo : MonoBehaviour
         }
     }
 
+
+    public void Regis(string email, string password, string name, System.Action<string> callback)
+    {
+        StartCoroutine(_Regis(email, password, name, callback));
+    }
+
+    IEnumerator _Regis(string email, string password, string name, System.Action<string> callback)
+    {
+        password = SecureHelper.HashSalt(password, _passwordSalt);
+        var uri = endpoint + "/register";
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+        form.AddField("password", password);
+        form.AddField("name", name);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result != null)
+        {
+            callback(result);
+        }
+        else
+        {
+            callback(null);
+        }
+    }
+
+    public void Login(string email, string password, System.Action<string> callback)
+    {
+        StartCoroutine(_Login(email, password, callback));
+    }
+
+    IEnumerator _Login(string email, string password, System.Action<string> callback)
+    {
+        password = SecureHelper.HashSalt(password, _passwordSalt);
+        var uri = endpoint + "/login";
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+        form.AddField("password", password);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result != null)
+        {
+            callback(result);
+        }
+        else
+        {
+            callback(null);
+        }
+    }
+
+    public void GetPlayerInfo(string id, System.Action<string> callback)
+    {
+        StartCoroutine(_GetPlayerInfo(id, callback));
+    }
+
+    IEnumerator _GetPlayerInfo(string id, System.Action<string> callback)
+    {
+
+        //Debug.Log("_GetPlayerInfo: " + id);
+
+        var uri = endpoint + "/getPlayerInfo";
+
+        WWWForm form = new WWWForm();
+        form.AddField("id", id);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+        if (result != null)
+        {
+            callback(result);
+        }
+        else
+        {
+            callback(null);
+        }
+    }
+
+
     public void FetchAllQuestion(int dimension, System.Action<List<QuestionData>> callback)
     {
         StartCoroutine(_FetchAllQuestion(dimension, callback));
@@ -280,11 +359,21 @@ public class DatabaseManagerMongo : MonoBehaviour
             var json = JsonConvert.SerializeObject(answer);
             form.AddField("playerAnswer", json);
 
-            yield return _SendWebRequest(uri, form, (data) => {
+            yield return _SendWebRequest(uri, form, (data) =>
+            {
                 //Debug.Log(data);
             });
         }
         callback("update complete");
+    }
+
+    private static string _passwordSalt = "anmly";
+
+    private bool ValidatePassword(string _password, string _passwordHash)
+    {
+        var passwordHash = SecureHelper.HashSalt(_password, _passwordSalt);
+
+        return passwordHash == _passwordHash;
     }
 }
 
