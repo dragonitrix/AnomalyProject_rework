@@ -8,7 +8,7 @@ using UnityEngine;
 public class Dialogue
 {
     public string id;
-    [TextArea(5,20)]
+    [TextArea(10,20)]
     public string text;
 
 }

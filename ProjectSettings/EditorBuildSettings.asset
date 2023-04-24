@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/sc_intro.unity
+    guid: 84f94898833c55c4d859ebe8df8a76f1
+  - enabled: 1
     path: Assets/Scenes/sc_mainmenu.unity
     guid: d6d0ec70cf0aefc4aa95573446e87811
   - enabled: 1
@@ -17,6 +20,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/sc_mission_2.unity
     guid: 43afd003d0bb6b5478c7165bb3a701e1
+  - enabled: 1
+    path: Assets/Scenes/sc_mission_3.unity
+    guid: c1f8d57161b05b048afeee733638bdc0
+  - enabled: 1
+    path: Assets/Scenes/sc_mission_4.unity
+    guid: d5a6b420663d71741a8ee5c922ca5196
+  - enabled: 1
+    path: Assets/Scenes/sc_mission_5.unity
+    guid: e83856f7180d4de4f8652c85ba6263f9
+  - enabled: 1
+    path: Assets/Scenes/sc_mission_6.unity
+    guid: 78c8032f45a3c39488081ad84bbeb295
   - enabled: 0
     path: Assets/Scenes/sc_core.unity
     guid: 3b67fac5c6710de409e8733837df93c3
