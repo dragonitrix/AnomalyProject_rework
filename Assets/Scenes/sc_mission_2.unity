@@ -546,6 +546,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1884983835}
     m_Modifications:
+    - target: {fileID: 1349591577885695502, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: questionObj
+      value: 
+      objectReference: {fileID: 11400000, guid: 24c3f9e74465e5141b00cddef4560345, type: 2}
     - target: {fileID: 1349591577885695506, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -682,6 +686,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4594731847046153350, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: dimension
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4594731847618200716, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -730,6 +738,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5005773612106700446, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: dialogueSet
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c879749f0e20ff4dbf87a487a2cf566, type: 2}
     - target: {fileID: 5005773613110088523, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -746,6 +758,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5005773613110088527, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: dialogueSet
+      value: 
+      objectReference: {fileID: 11400000, guid: a07163be660d8c8438e01986182fe1f7, type: 2}
+    - target: {fileID: 5005773613371283963, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: dialogueSet
+      value: 
+      objectReference: {fileID: 11400000, guid: e134d19ccdd0b31498be6056870fd797, type: 2}
     - target: {fileID: 5005773613371283967, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -826,6 +846,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8848272344318342500, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: questionObj
+      value: 
+      objectReference: {fileID: 11400000, guid: 1471dcb137f33ad46b8dbd4106a8afc4, type: 2}
     - target: {fileID: 8848272344318342520, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -858,6 +882,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8848272344450824637, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: questionObj
+      value: 
+      objectReference: {fileID: 11400000, guid: b128f34f43cd28b4b8a95fb3a2eb6703, type: 2}
+    - target: {fileID: 9090005400030876780, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
+      propertyPath: dialogueSet
+      value: 
+      objectReference: {fileID: 11400000, guid: e4658fa1c8db4b644bf30bc61dc94588, type: 2}
     - target: {fileID: 9090005400030876796, guid: 9fdcc7b72c0b42e44b99f831126ee619, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

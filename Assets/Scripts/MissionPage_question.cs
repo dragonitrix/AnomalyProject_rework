@@ -73,16 +73,34 @@ public class MissionPage_question : MissionPage
         var result = CheckAnswer(index);
         ShowResult(result);
 
-        if(!result) manager.DeductHealth(1);
+        if (!result) manager.DeductHealth(1);
 
     }
 
     bool CheckAnswer(int rawindex)
     {
-        if (rawindex + 1 == questionObj.question.answer)
+
+        var answer = rawindex + 1;
+
+        if (questionObj.question.answer.ToString().Length == 1)
         {
-            return true;
+            if (answer == questionObj.question.answer)
+            {
+                return true;
+            }
         }
+        else
+        {
+            var multianswer = questionObj.question.answer.ToString();
+            for (int i = 0; i < multianswer.Length; i++)
+            {
+                if (answer.ToString() == multianswer[i].ToString())
+                {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
