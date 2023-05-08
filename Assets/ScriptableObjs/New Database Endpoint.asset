@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: New Database Endpoint
   m_EditorClassIdentifier: 
   dev: http://localhost:20201/api
-  production: https://digilern.camt.cmu.ac.th/api
+  production: https://digilearn.camt.cmu.ac.th/api

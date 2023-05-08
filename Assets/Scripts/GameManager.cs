@@ -25,6 +25,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         HideLoadOverlay(LoadOverlayType._ALL);
+
+        //var groupid = URLParameters.GetSearchParameters()["groupid"];
+        //
+        //var path = URLParameters.location_pathname();
+        //
+        //Debug.Log("test URLParameters");
+        //
+        //Debug.Log("path: " + path);
+        //Debug.Log("groupid: " + groupid);
     }
     public void ShowLoadOverlay(LoadOverlayType type)
     {
@@ -75,6 +84,20 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    public void PrepareAndGoToEvalScene(Dimension dimension)
+    {
+        Debug.Log("PrepareAndGoToEvalScene: " + dimension);
+        ShowLoadOverlay(LoadOverlayType._BIG);
+        DatabaseManagerMongo.instance.FetchEval((int)dimension, (all) =>
+        {
+            EvalPool.instance.currentDimension = dimension;
+            EvalPool.instance.evals = all;
+            EvalPool.instance.evals.Shuffle();
+            HideLoadOverlay(LoadOverlayType._ALL);
+            GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_eval);
+        });
+    }
+
     public void GoToMission(Dimension dimension)
     {
         switch (dimension)
@@ -107,6 +130,16 @@ public class GameManager : MonoBehaviour
     {
         ShowLoadOverlay(LoadOverlayType._SMALL);
         DatabaseManagerMongo.instance.UpdatePlayerAnswers(answers, (data) =>
+        {
+            callback(data);
+            HideLoadOverlay(LoadOverlayType._SMALL);
+        });
+    }
+
+    public void UpdatePlayerInfo(System.Action<string> callback)
+    {
+        ShowLoadOverlay(LoadOverlayType._SMALL);
+        DatabaseManagerMongo.instance.UpdatePlayerInfo((data) =>
         {
             callback(data);
             HideLoadOverlay(LoadOverlayType._SMALL);

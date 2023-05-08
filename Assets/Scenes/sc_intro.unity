@@ -4845,10 +4845,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8403161665749575715, guid: d8f410147f673ad41aa9187c81266259, type: 3}
       propertyPath: mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8f410147f673ad41aa9187c81266259, type: 3}
+--- !u!1 &1628234984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8403161665749575712, guid: d8f410147f673ad41aa9187c81266259, type: 3}
+  m_PrefabInstance: {fileID: 1628234983}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1628234985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628234984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e595e8794000749b41cc2c84761fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testData:
+    Protocol: 
+    Hostname: 
+    Port: 
+    Pathname: 
+    Search: 
+    Hash: 
 --- !u!1 &1677075052
 GameObject:
   m_ObjectHideFlags: 0

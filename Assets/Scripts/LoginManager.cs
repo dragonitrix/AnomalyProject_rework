@@ -64,7 +64,8 @@ public class LoginManager : MonoBehaviour
         {
             if (data != null)
             {
-                GetPlayerData(data);
+                //Debug.Log(data);
+                GetPlayerInfo(data);
             }
             else
             {
@@ -91,7 +92,7 @@ public class LoginManager : MonoBehaviour
         {
             if (data != null)
             {
-                GetPlayerData(data);
+                GetPlayerInfo(data);
             }
             else
             {
@@ -101,14 +102,12 @@ public class LoginManager : MonoBehaviour
 
     }
 
-    public void GetPlayerData(string id)
+    public void GetPlayerInfo(string id)
     {
         DatabaseManagerMongo.instance.GetPlayerInfo(id, (data) =>
         {
             try
             {
-                var info = JsonConvert.DeserializeObject<PlayerInfo>(data);
-                PlayerInfoManager.instance.SetPlayerInfo(info);
                 OnLoginComplete();
             }
             catch (System.Exception)

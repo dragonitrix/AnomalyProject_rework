@@ -75,7 +75,7 @@ public class MainMenuManager : MonoBehaviour
     }
     public void OnEvalContentClick(int index)
     {
-
+        GameManager.instance.PrepareAndGoToEvalScene((Dimension)index + 1);
     }
 
     public void SetAllIdle()

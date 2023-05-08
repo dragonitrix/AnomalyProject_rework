@@ -36,5 +36,6 @@ public enum AnswerType
 {
     _MISSION = 0,
     _TEST,
-    _EVAL
+    _EVAL_PRE,
+    _EVAL_POST,
 }

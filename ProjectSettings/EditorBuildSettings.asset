@@ -12,8 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/sc_mainmenu.unity
     guid: d6d0ec70cf0aefc4aa95573446e87811
   - enabled: 1
-    path: Assets/Scenes/sc_question.unity
+    path: Assets/Scenes/sc_eval.unity
     guid: e28430fa273a8964ab6312da45068433
+  - enabled: 1
+    path: Assets/Scenes/sc_question.unity
+    guid: 477a620864e13f446a9f6abd88a983d5
   - enabled: 1
     path: Assets/Scenes/sc_mission_1.unity
     guid: c39c2007d64f95043b68c92aa797ab22

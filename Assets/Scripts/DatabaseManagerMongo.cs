@@ -46,9 +46,13 @@ public class DatabaseManagerMongo : MonoBehaviour
         setupEndpoint();
         if (mock)
         {
-            isLoggedin = true;
-            PlayerInfoManager.instance.account.id = _mockAccountID;
-            PlayerInfoManager.instance.info.nickname = "kot(mock)";
+            GetPlayerInfo(_mockAccountID, (data) => {
+                Debug.Log("mockID login success");
+                isLoggedin = true;
+            });
+            //PlayerInfoManager.instance.account.id = _mockAccountID;
+            //PlayerInfoManager.instance.info.nickname = "kot(mock)";
+
         }
     }
 
@@ -145,17 +149,35 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     IEnumerator _Login(string email, string password, System.Action<string> callback)
     {
-        password = SecureHelper.HashSalt(password, _passwordSalt);
+        //password = SecureHelper.HashSalt(password, _passwordSalt);
         var uri = endpoint + "/login";
         WWWForm form = new WWWForm();
         form.AddField("email", email);
-        form.AddField("password", password);
+        //form.AddField("password", password);
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
 
         if (result != null)
         {
-            callback(result);
+            try
+            {
+                var tempinfo = JsonConvert.DeserializeObject<TempPlayerAccount>(result);
+                //validate
+                if (ValidatePassword(password, tempinfo.password))
+                {
+                    Debug.Log("pass");
+                    callback(tempinfo.id);
+                    tempinfo = null;
+                }
+                else
+                {
+                    callback(null);
+                }
+            }
+            catch (Exception)
+            {
+                callback(null);
+            }
         }
         else
         {
@@ -170,13 +192,35 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     IEnumerator _GetPlayerInfo(string id, System.Action<string> callback)
     {
-
-        //Debug.Log("_GetPlayerInfo: " + id);
-
         var uri = endpoint + "/getPlayerInfo";
 
         WWWForm form = new WWWForm();
         form.AddField("id", id);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+        if (result != null)
+        {
+            var info = JsonConvert.DeserializeObject<PlayerInfo>(result);
+            PlayerInfoManager.instance.SetPlayerInfo(info);
+            callback(result);
+        }
+        else
+        {
+            callback(null);
+        }
+    }
+
+    public void UpdatePlayerInfo(System.Action<string> callback)
+    {
+        StartCoroutine(_UpdatePlayerInfo(callback));
+    }
+
+    IEnumerator _UpdatePlayerInfo(System.Action<string> callback)
+    {
+        var uri = endpoint + "/updatePlayerInfo";
+
+        WWWForm form = new WWWForm();
+        form.AddField("playerInfo", PlayerInfoManager.instance.info.JSON());
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
         if (result != null)
@@ -188,7 +232,6 @@ public class DatabaseManagerMongo : MonoBehaviour
             callback(null);
         }
     }
-
 
     public void FetchAllQuestion(int dimension, System.Action<List<QuestionData>> callback)
     {
@@ -343,6 +386,56 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     }
 
+    public void FetchEval(int dimension, System.Action<List<EvalData>> callback)
+    {
+        StartCoroutine(_FetchEval(dimension, callback));
+    }
+
+    IEnumerator _FetchEval(int dimension, System.Action<List<EvalData>> callback)
+    {
+        var uri = endpoint + "/getEvalIDs";
+        WWWForm form = new WWWForm();
+        form.AddField("dimension", dimension);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        Debug.Log(idList.Count + " evals found on dimension: " + dimension);
+
+        List<EvalData> questionDatas = new List<EvalData>();
+
+        var qURI = endpoint + "/getEval";
+        for (int i = 0; i < idList.Count; i++)
+        {
+            var id = idList[i];
+            //Debug.Log("id: " + id);
+
+            WWWForm qform = new WWWForm();
+            qform.AddField("id", id);
+            string q = null;
+            yield return _SendWebRequest(qURI, qform, (string _result) => { q = _result; });
+
+            if (q != null)
+            {
+                //Debug.Log(q);
+                var question = JsonConvert.DeserializeObject<EvalData>(q);
+                questionDatas.Add(question);
+            }
+        }
+        //foreach (var item in questionDatas)
+        //{
+        //    item.Log();
+        //}
+        callback(questionDatas);
+    }
+
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
         StartCoroutine(_UpdatePlayerAnswers(answers, callback));
@@ -375,6 +468,16 @@ public class DatabaseManagerMongo : MonoBehaviour
 
         return passwordHash == _passwordHash;
     }
+}
+
+
+[Serializable]
+public class TempPlayerAccount
+{
+    public string id;
+    public string email;
+    public string password;
+    public string groupid;
 }
 
 // future implementation

@@ -4567,11 +4567,11 @@ MonoBehaviour:
   iconCanvasGroup: {fileID: 2000453010440860890}
   contentCanvasGroup: {fileID: 2000453010642457098}
   contents:
-  - {fileID: 1674942661}
-  - {fileID: 1622974092}
   - {fileID: 2084768401}
   - {fileID: 1211707404}
+  - {fileID: 1674942661}
   - {fileID: 2031566952}
+  - {fileID: 1622974092}
   - {fileID: 1128230993}
 --- !u!1 &2000453012410417076
 GameObject:
