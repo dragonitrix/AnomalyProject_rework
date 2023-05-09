@@ -84,13 +84,14 @@ public class GameManager : MonoBehaviour
         });
     }
 
-    public void PrepareAndGoToEvalScene(Dimension dimension)
+    public void PrepareAndGoToEvalScene(Dimension dimension,bool redirectToMission = false)
     {
         Debug.Log("PrepareAndGoToEvalScene: " + dimension);
         ShowLoadOverlay(LoadOverlayType._BIG);
         DatabaseManagerMongo.instance.FetchEval((int)dimension, (all) =>
         {
             EvalPool.instance.currentDimension = dimension;
+            EvalPool.instance.redirectToMission = redirectToMission;
             EvalPool.instance.evals = all;
             EvalPool.instance.evals.Shuffle();
             HideLoadOverlay(LoadOverlayType._ALL);

@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public class EvalTestManager : MonoBehaviour
 {
 
+    public Dimension dimension;
+    public bool redirectToMission;
+
     public GameObject eval_prefab;
 
     public RectTransform evalPanel;
@@ -18,6 +21,7 @@ public class EvalTestManager : MonoBehaviour
 
     public List<EvalQuestionObj_radio> currentQuestionsObj = new List<EvalQuestionObj_radio>();
 
+    public TextMeshProUGUI dimensionText;
 
     public void InitTest()
     {
@@ -35,6 +39,12 @@ public class EvalTestManager : MonoBehaviour
 
             currentQuestionsObj.Add(script);
         }
+
+        dimension = EvalPool.instance.currentDimension;
+        dimensionText.text = ((int)dimension).ToString();
+
+        redirectToMission = EvalPool.instance.redirectToMission;
+
         Resize();
     }
 
@@ -56,6 +66,14 @@ public class EvalTestManager : MonoBehaviour
             GameManager.instance.UpdatePlayerInfo((data) =>
             {
                 //do something
+                if (redirectToMission)
+                {
+                    GameManager.instance.GoToMission(dimension);
+                }
+                else
+                {
+                    GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
+                }
 
             });
         });

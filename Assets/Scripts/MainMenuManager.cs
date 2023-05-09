@@ -10,6 +10,8 @@ public class MainMenuManager : MonoBehaviour
 
     public MainMenuBlankArea blankArea;
 
+    public SimplePopup pretestPopup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,11 @@ public class MainMenuManager : MonoBehaviour
         evalButton.onContentClick = OnEvalContentClick;
 
         blankArea.onPanelClick = SetAllIdle;
+
+        //pretestPopup.onCancle = OnPretestCancle;
+        //pretestPopup.onConfirm = OnPretestConfirm;
     }
+
 
     public void OnQuestionClick()
     {
@@ -71,7 +77,24 @@ public class MainMenuManager : MonoBehaviour
     }
     public void OnMissionContentClick(int index)
     {
-        GameManager.instance.GoToMission((Dimension)index + 1);
+        //check pre-test
+        var dimension = (Dimension)index + 1;
+
+        if (!PlayerInfoManager.instance.info.evalStatus[index])
+        {
+            Debug.Log("no pre test record.");
+            pretestPopup.Show();
+            pretestPopup.onConfirm = () =>
+            {
+                GameManager.instance.PrepareAndGoToEvalScene(dimension, true);
+            };
+        }
+        else
+        {
+            GameManager.instance.GoToMission((Dimension)index + 1);
+        }
+
+
     }
     public void OnEvalContentClick(int index)
     {
@@ -85,4 +108,13 @@ public class MainMenuManager : MonoBehaviour
         evalButton.SetState(MainMenuButton.State._IDLE);
     }
 
+    public void OnPretestCancle()
+    {
+
+    }
+
+    public void OnPretestConfirm()
+    {
+
+    }
 }

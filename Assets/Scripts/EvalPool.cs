@@ -19,5 +19,5 @@ public class EvalPool : MonoBehaviour
     }
     public Dimension currentDimension;
     public List<EvalData> evals = new List<EvalData>();
-
+    public bool redirectToMission = false;
 }
