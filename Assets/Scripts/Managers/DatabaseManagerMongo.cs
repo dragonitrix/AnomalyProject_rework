@@ -47,7 +47,8 @@ public class DatabaseManagerMongo : MonoBehaviour
         setupEndpoint();
         if (mock)
         {
-            GetPlayerInfo(_mockAccountID, (data) => {
+            GetPlayerInfo(_mockAccountID, (data) =>
+            {
                 Debug.Log("mockID login success");
                 isLoggedin = true;
             });
@@ -349,6 +350,54 @@ public class DatabaseManagerMongo : MonoBehaviour
         callback(answers);
     }
 
+    public void FetchPlayerEval(System.Action<List<Answer>> callback)
+    {
+        StartCoroutine(_FetchPlayerEval(callback));
+    }
+
+    IEnumerator _FetchPlayerEval(System.Action<List<Answer>> callback)
+    {
+        var uri = endpoint + "/getPlayerEvalAnswerIDs";
+        WWWForm form = new WWWForm();
+        form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        List<Answer> answers = new List<Answer>();
+
+        var aURI = endpoint + "/getPlayerAnswer";
+        for (int i = 0; i < idList.Count; i++)
+        {
+            var id = idList[i];
+            //Debug.Log("questionID: " + id);
+
+            WWWForm aform = new WWWForm();
+            aform.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+            aform.AddField("questionID", id);
+            string a = null;
+            yield return _SendWebRequest(aURI, aform, (string _result) => { a = _result; });
+
+            if (a != null)
+            {
+                //Debug.Log(a);
+                var answer = JsonConvert.DeserializeObject<Answer>(a);
+                answers.Add(answer);
+            }
+        }
+        //foreach (var item in answers)
+        //{
+        //    item.Log();
+        //}
+        callback(answers);
+    }
     public void FetchUnansweredQuestion(int dimension, System.Action<List<QuestionData>, List<QuestionData>> callback)
     {
         StartCoroutine(_FetchUnansweredQuestion(dimension, callback));
@@ -449,6 +498,81 @@ public class DatabaseManagerMongo : MonoBehaviour
         //}
         callback(questionDatas);
     }
+
+
+    public void FetchAllEval(System.Action<List<EvalData>> callback)
+    {
+        StartCoroutine(_FetchAllEval(callback));
+    }
+
+    IEnumerator _FetchAllEval(System.Action<List<EvalData>> callback)
+    {
+        var uri = endpoint + "/getAllEvalIDs";
+        WWWForm form = new WWWForm();
+        //form.AddField("dimension", "{\"$in\":[1,2,3,4,5,6]}");
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        List<EvalData> questionDatas = new List<EvalData>();
+
+        var qURI = endpoint + "/getEval";
+        for (int i = 0; i < idList.Count; i++)
+        {
+            var id = idList[i];
+            //Debug.Log("id: " + id);
+
+            WWWForm qform = new WWWForm();
+            qform.AddField("id", id);
+            string q = null;
+            yield return _SendWebRequest(qURI, qform, (string _result) => { q = _result; });
+
+            if (q != null)
+            {
+                //Debug.Log(q);
+                var question = JsonConvert.DeserializeObject<EvalData>(q);
+                questionDatas.Add(question);
+            }
+        }
+        //foreach (var item in questionDatas)
+        //{
+        //    item.Log();
+        //}
+        callback(questionDatas);
+    }
+
+    public void GetPlayerEvalScore(int type, System.Action<List<float>> callback)
+    {
+        StartCoroutine(_GetPlayerEvalScore(type, callback));
+    }
+
+    IEnumerator _GetPlayerEvalScore(int type, System.Action<List<float>> callback)
+    {
+        var uri = endpoint + "/getPlayerEvalScore";
+        WWWForm form = new WWWForm();
+        form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+        form.AddField("type", type);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var evalScore = JsonConvert.DeserializeObject<EvalScore>(result);
+
+        callback(evalScore.evalScore);
+    }
+
 
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
@@ -560,6 +684,11 @@ public class DatabaseManagerMongo : MonoBehaviour
     }
 }
 
+[Serializable]
+public class EvalScore
+{
+    public List<float> evalScore = new List<float>();
+}
 
 [Serializable]
 public class TempPlayerAccount

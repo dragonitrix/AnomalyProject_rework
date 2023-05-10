@@ -43,4 +43,45 @@ public static class ExtensionMethods
         }
     }
 
+    public static int GetEvalAnswerScore(this List<Answer> answers, Dimension dimension)
+    {
+        int score = 0;
+
+        var filtered = answers.GetAnswerRange(dimension);
+
+        for (int i = 0; i < filtered.Count; i++)
+        {
+            score += filtered[i].answer;
+        }
+
+        return score;
+    }
+
+    public static List<Answer> GetAnswerRange(this List<Answer> answers, Dimension dimension)
+    {
+        var _answers = new List<Answer>();
+
+        for (int i = 0; i < answers.Count; i++)
+        {
+            if ((Dimension)answers[i].dimension == dimension)
+            {
+                _answers.Add(answers[i]);
+            }
+        }
+        return _answers;
+    }
+
+    public static List<EvalData> GetEvalRange(this List<EvalData> evals, Dimension dimension)
+    {
+        var _evals = new List<EvalData>();
+
+        for (int i = 0; i < evals.Count; i++)
+        {
+            if ((Dimension)evals[i].dimension == dimension)
+            {
+                _evals.Add(evals[i]);
+            }
+        }
+        return _evals;
+    }
 }
