@@ -50,19 +50,23 @@ public class AchievementPopupController : MonoBehaviour
     public void UpdateSubBadges()
     {
         var completeCount = 0;
+        var totalCount = 0;
         for (int i = 0; i < subBadgeControllers.Count; i++)
         {
             subBadgeControllers[i].UpdateTask();
-            if (subBadgeControllers[i].complete) completeCount++;
+            //if (subBadgeControllers[i].complete) completeCount++;
+
+            completeCount += subBadgeControllers[i].completeCount;
+            totalCount += subBadgeControllers[i].achievements.Count;
         }
 
 
-        float progressValue = (float)completeCount / (float)subBadgeControllers.Count;
+        float progressValue = (float)completeCount / (float)totalCount;
 
         mainProgressbar.SetValue(progressValue);
         mainProgressbar.SetText((progressValue * 100f).ToString("00") + "%");
 
-        if (completeCount == subBadgeControllers.Count)
+        if (completeCount == totalCount)
         {
             icon_complete.alpha = 1;
         }

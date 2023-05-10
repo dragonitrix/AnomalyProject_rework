@@ -180,16 +180,24 @@ public class QuestionTestManager : MonoBehaviour
     {
         var currentQuestion = currentQuestions[currentQuestionIndex];
 
-        var result = currentQuestion.answer == index;
+        var answerChoice = (index + 1);
+
+        var result = currentQuestion.answer == answerChoice;
 
         var answer = new Answer(
             PlayerInfoManager.instance.currentPlayerId,
             AnswerType._TEST,
             currentQuestion.id,
             currentQuestion.dimension,
-            index,
+            answerChoice,
             result
             );
+
+        //answer.Log();
+
+        Debug.Log("currentQuestion.answer: " + currentQuestion.answer);
+        Debug.Log("answer: " + answerChoice);
+        Debug.Log("result: " + result);
 
         currentAnswer.Add(answer);
 

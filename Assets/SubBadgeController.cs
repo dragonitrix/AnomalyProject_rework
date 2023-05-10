@@ -23,6 +23,8 @@ public class SubBadgeController : MonoBehaviour
 
     public bool complete = false;
 
+    public int completeCount = 0;
+
     public void SetDimension(Dimension dimension)
     {
         this.dimension = dimension;
@@ -67,6 +69,8 @@ public class SubBadgeController : MonoBehaviour
 
             if (progressVal >= achievement.goal) completeCount++;
         }
+
+        this.completeCount = completeCount;
 
         var mainVal = (float)completeCount / (float)achievements.Count;
 

@@ -64,7 +64,7 @@ public class LoginManager : MonoBehaviour
         {
             if (data != null)
             {
-                //Debug.Log(data);
+                Debug.Log(data);
                 GetPlayerInfo(data);
             }
             else
@@ -92,6 +92,7 @@ public class LoginManager : MonoBehaviour
         {
             if (data != null)
             {
+                Debug.Log(data);
                 GetPlayerInfo(data);
             }
             else

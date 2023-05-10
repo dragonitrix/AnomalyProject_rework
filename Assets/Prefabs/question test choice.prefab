@@ -94,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.01
-  m_fontSizeBase: 23.01
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -276,7 +276,7 @@ MonoBehaviour:
   choiceText: {fileID: 138983759485013414}
   canvasGroup: {fileID: 138983759647848172}
   button: {fileID: 138983759647848170}
-  manager: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!225 &138983759647848172
 CanvasGroup:
   m_ObjectHideFlags: 0

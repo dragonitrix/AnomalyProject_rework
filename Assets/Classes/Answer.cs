@@ -13,8 +13,8 @@ public class Answer
 
     public void Log()
     {
-        Debug.Log("playerID: " + playerID);
-        Debug.Log("answerType: " + answerType);
+        //Debug.Log("playerID: " + playerID);
+        //Debug.Log("answerType: " + answerType);
         Debug.Log("questionID: " + questionID);
         Debug.Log("dimension: " + dimension);
         Debug.Log("answer: " + answer);

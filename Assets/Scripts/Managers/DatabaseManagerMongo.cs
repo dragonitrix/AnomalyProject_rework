@@ -135,7 +135,8 @@ public class DatabaseManagerMongo : MonoBehaviour
 
         if (result != null)
         {
-            callback(result);
+            var tempinfo = JsonConvert.DeserializeObject<TempPlayerAccount>(result);
+            callback(tempinfo.id);
         }
         else
         {

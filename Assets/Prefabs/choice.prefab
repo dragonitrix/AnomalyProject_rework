@@ -107,6 +107,7 @@ MonoBehaviour:
   textMesh: {fileID: 1341460945289785118}
   controller: {fileID: 0}
   index: 0
+  tintColor: {r: 0.40444446, g: 0.37254903, b: 0.8235294, a: 1}
 --- !u!1 &1341460945289785112
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +201,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
