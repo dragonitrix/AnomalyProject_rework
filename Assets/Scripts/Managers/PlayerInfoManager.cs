@@ -32,7 +32,9 @@ public class PlayerInfoManager : MonoBehaviour
     public PlayerInfo info;
     public PlayerScore score;
 
-    public string CurrentPlayerId { get { return account.id; } }
+    public List<AchievementProgress> achievementProgresses;
+
+    public string currentPlayerId { get { return account.id; } }
 
     public void SetPlayerInfo(PlayerInfo info)
     {
@@ -49,9 +51,14 @@ public class PlayerInfoManager : MonoBehaviour
     {
         return info.evalStatus[(int)dimension - 1];
     }
-    public void SetEvalStatus(Dimension dimension,bool val)
+    public void SetEvalStatus(Dimension dimension, bool val)
     {
         info.evalStatus[(int)dimension - 1] = val;
+    }
+
+    public AchievementProgress GetAchievementProgress(string id)
+    {
+        return achievementProgresses.Find((x) => x.achievementID == id);
     }
 
 }

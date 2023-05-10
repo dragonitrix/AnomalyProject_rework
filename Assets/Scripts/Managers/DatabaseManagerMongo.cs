@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class DatabaseManagerMongo : MonoBehaviour
 {
@@ -200,9 +201,17 @@ public class DatabaseManagerMongo : MonoBehaviour
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
         if (result != null)
         {
+            Debug.Log(result);
             var info = JsonConvert.DeserializeObject<PlayerInfo>(result);
             PlayerInfoManager.instance.SetPlayerInfo(info);
+
             callback(result);
+
+            //callback(result);
+            //FetchAchievementProgress((data) =>
+            //{
+            //    callback(result);
+            //});
         }
         else
         {
@@ -221,6 +230,10 @@ public class DatabaseManagerMongo : MonoBehaviour
 
         WWWForm form = new WWWForm();
         form.AddField("playerInfo", PlayerInfoManager.instance.info.JSON());
+
+        Debug.Log("update player info");
+        Debug.Log(PlayerInfoManager.instance.info.JSON());
+
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
         if (result != null)
@@ -292,7 +305,7 @@ public class DatabaseManagerMongo : MonoBehaviour
     {
         var uri = endpoint + "/getPlayerAnswerIDs";
         WWWForm form = new WWWForm();
-        form.AddField("playerID", PlayerInfoManager.instance.CurrentPlayerId);
+        form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
         form.AddField("dimension", dimension);
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
@@ -316,7 +329,7 @@ public class DatabaseManagerMongo : MonoBehaviour
             //Debug.Log("questionID: " + id);
 
             WWWForm aform = new WWWForm();
-            aform.AddField("playerID", PlayerInfoManager.instance.CurrentPlayerId);
+            aform.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
             aform.AddField("questionID", id);
             string a = null;
             yield return _SendWebRequest(aURI, aform, (string _result) => { a = _result; });
@@ -343,7 +356,7 @@ public class DatabaseManagerMongo : MonoBehaviour
     IEnumerator _FetchUnansweredQuestion(int dimension, System.Action<List<QuestionData>, List<QuestionData>> callback)
     {
 
-        var playerID = PlayerInfoManager.instance.CurrentPlayerId;
+        var playerID = PlayerInfoManager.instance.currentPlayerId;
 
         List<QuestionData> questions = new List<QuestionData>();
         List<Answer> answers = new List<Answer>();
@@ -442,7 +455,7 @@ public class DatabaseManagerMongo : MonoBehaviour
     }
     IEnumerator _UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
-        var playerID = PlayerInfoManager.instance.CurrentPlayerId;
+        var playerID = PlayerInfoManager.instance.currentPlayerId;
         var uri = endpoint + "/updatePlayerAnswer";
 
         for (int i = 0; i < answers.Count; i++)
@@ -458,6 +471,82 @@ public class DatabaseManagerMongo : MonoBehaviour
             });
         }
         callback("update complete");
+    }
+
+    public void FetchAchievementProgress(System.Action<List<AchievementProgress>> callback)
+    {
+        StartCoroutine(_FetchAchievementProgress(callback));
+    }
+
+    IEnumerator _FetchAchievementProgress(System.Action<List<AchievementProgress>> callback)
+    {
+        var uri = endpoint + "/getAchievementIDs";
+        WWWForm form = new WWWForm();
+        form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        Debug.Log(idList.Count + " achievement found");
+
+        List<AchievementProgress> achievementProgresses = new List<AchievementProgress>();
+
+        var qURI = endpoint + "/getAchievementProgress";
+        for (int i = 0; i < idList.Count; i++)
+        {
+            var id = idList[i];
+            //Debug.Log("id: " + id);
+
+            WWWForm qform = new WWWForm();
+            qform.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+            qform.AddField("achievementID", id);
+            string q = null;
+            yield return _SendWebRequest(qURI, qform, (string _result) => { q = _result; });
+
+            if (q != null)
+            {
+                //Debug.Log(q);
+                var achievement = JsonConvert.DeserializeObject<AchievementProgress>(q);
+                achievementProgresses.Add(achievement);
+            }
+        }
+        //foreach (var item in questionDatas)
+        //{
+        //    item.Log();
+        //}
+        PlayerInfoManager.instance.achievementProgresses.Clear();
+        PlayerInfoManager.instance.achievementProgresses = achievementProgresses.ToList();
+        callback(achievementProgresses);
+    }
+
+    public void UpdateAchievementProgress(AchievementProgress achievementProgress, System.Action<string> callback)
+    {
+        StartCoroutine(_UpdateAchievementProgress(achievementProgress, callback));
+    }
+    IEnumerator _UpdateAchievementProgress(AchievementProgress achievementProgress, System.Action<string> callback)
+    {
+        var playerID = PlayerInfoManager.instance.currentPlayerId;
+        var uri = endpoint + "/updateAchievementProgress";
+
+        WWWForm form = new WWWForm();
+        var json = JsonConvert.SerializeObject(achievementProgress);
+        form.AddField("achievement", json);
+
+        yield return _SendWebRequest(uri, form, (data) =>
+        {
+            //Debug.Log(data);
+        });
+
+        callback("update complete");
+
+        //callback("update complete");
     }
 
     private static string _passwordSalt = "anmly";

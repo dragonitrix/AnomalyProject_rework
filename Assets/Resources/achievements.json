@@ -1,0 +1,424 @@
+{
+	"achievements": [
+		{
+			"id": "p1WouAKD84A5bRGM5QE8bY",
+			"dimension": 1,
+			"description": "ทำแบบทดสอบในมิติที่ 1 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "xwr6oYqaNpHMXbNEJK3GxL",
+			"dimension": 1,
+			"description": "ทำแบบทดสอบในมิติที่ 1 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "vXaqjEk7QFpdVBfMy1aLUY",
+			"dimension": 1,
+			"description": "ทำแบบทดสอบในมิติที่ 1 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "3dpTiiCnZ9RR6nzXntk2DB",
+			"dimension": 1,
+			"description": "เข้าเล่น mission ในมิติที่ 1 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "gGuove6vaWsiKmercmJzxf",
+			"dimension": 1,
+			"description": "เข้าเล่น mission ในมิติที่ 1 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "9x2EfuRJhYfT6phTZwDbSS",
+			"dimension": 1,
+			"description": "เข้าเล่น mission ในมิติที่ 1 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "3BXZb61PhNiGhJqxnuz6ma",
+			"dimension": 1,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 1 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "v1WhCtUqKGodYwA3aMC5rQ",
+			"dimension": 1,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 1 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "cTDbQhDgWkj7h2gcfZtef9",
+			"dimension": 1,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 1 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "v4dm6Xb3y3NhtbgzHLeSW5",
+			"dimension": 1,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 1 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "vC6wrwR87A4xvYczU51A5z",
+			"dimension": 2,
+			"description": "ทำแบบทดสอบในมิติที่ 2 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "g6sE1k5mE8r6qXyQ8tCiW9",
+			"dimension": 2,
+			"description": "ทำแบบทดสอบในมิติที่ 2 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "27FCSgXGeCdCerxfMe7B6E",
+			"dimension": 2,
+			"description": "ทำแบบทดสอบในมิติที่ 2 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "jjbxNCgdZPWaPxYPQC5o35",
+			"dimension": 2,
+			"description": "เข้าเล่น mission ในมิติที่ 2 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "8ge2gDyDwUtEYfCJ4u9btn",
+			"dimension": 2,
+			"description": "เข้าเล่น mission ในมิติที่ 2 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "7V9Aj8KM3HMPoXsp2LrGjh",
+			"dimension": 2,
+			"description": "เข้าเล่น mission ในมิติที่ 2 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "p9nd8S1XTiNP4YyY7j32JU",
+			"dimension": 2,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 2 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "9Tqy7K2AT5XTVpo23u46HG",
+			"dimension": 2,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 2 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "jNssMEKuqzhZGintMVEK8W",
+			"dimension": 2,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 2 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "miPHJVokQyXk5CGEGJdiTs",
+			"dimension": 2,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 2 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "32m9rYLtG2NJjXqUiTLNxz",
+			"dimension": 3,
+			"description": "ทำแบบทดสอบในมิติที่ 3 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "kEirQjHoCDXq5LGC7JuEY9",
+			"dimension": 3,
+			"description": "ทำแบบทดสอบในมิติที่ 3 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "gtbtQyr71iDAJDhHrzM5DF",
+			"dimension": 3,
+			"description": "ทำแบบทดสอบในมิติที่ 3 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "gieagNQB8xxYhNWHds85vd",
+			"dimension": 3,
+			"description": "เข้าเล่น mission ในมิติที่ 3 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "hxSjKQBAfgGM98vHqJ5EWe",
+			"dimension": 3,
+			"description": "เข้าเล่น mission ในมิติที่ 3 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "bF3ca6QTti9JpF5gdQXYGp",
+			"dimension": 3,
+			"description": "เข้าเล่น mission ในมิติที่ 3 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "iXd2wBuMZkAeSgDMhjQfDJ",
+			"dimension": 3,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 3 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "8bh8HiC9Y14ydzUsGCm2tK",
+			"dimension": 3,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 3 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "qHUB3TSdBfZV2SaBrgNryS",
+			"dimension": 3,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 3 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "3jApozX5xu6sBSUNvFCpeP",
+			"dimension": 3,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 3 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "9thTJHEKqtoGoPGWRJ3X7Q",
+			"dimension": 4,
+			"description": "ทำแบบทดสอบในมิติที่ 4 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "j7HHQ64qECHrjQRMXQLReV",
+			"dimension": 4,
+			"description": "ทำแบบทดสอบในมิติที่ 4 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "hcdka5YRmBNjF5nyXiqvsH",
+			"dimension": 4,
+			"description": "ทำแบบทดสอบในมิติที่ 4 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "rPaTur4X2bmo8hb5zvuBNq",
+			"dimension": 4,
+			"description": "เข้าเล่น mission ในมิติที่ 4 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "4MVHyAbgjVGUcoZ8wFaVTM",
+			"dimension": 4,
+			"description": "เข้าเล่น mission ในมิติที่ 4 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "m1j5VhQLPQ6jQYeri7PPYB",
+			"dimension": 4,
+			"description": "เข้าเล่น mission ในมิติที่ 4 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "86WBzqu8VEnkZqqAPsDDRF",
+			"dimension": 4,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 4 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "uc6E2MWHvL1THT8rHF32u2",
+			"dimension": 4,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 4 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "nzMATJoAdcaxVFWYzfTYpY",
+			"dimension": 4,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 4 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "1cJuwy1D91Mfzd3RG6Pb7p",
+			"dimension": 4,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 4 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "pCG1qboCKbcv3tpDvBpJT1",
+			"dimension": 5,
+			"description": "ทำแบบทดสอบในมิติที่ 5 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "fCphonkEFxK4BLtrqvNBB9",
+			"dimension": 5,
+			"description": "ทำแบบทดสอบในมิติที่ 5 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "f4vLQkB46AoEEWpaNsYGQj",
+			"dimension": 5,
+			"description": "ทำแบบทดสอบในมิติที่ 5 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "dzyw463KZujvbkhTF273kJ",
+			"dimension": 5,
+			"description": "เข้าเล่น mission ในมิติที่ 5 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "uL5miRSqF6TFn7nYCFjz6q",
+			"dimension": 5,
+			"description": "เข้าเล่น mission ในมิติที่ 5 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "5y6ULqs81KBJvpGh7LthWp",
+			"dimension": 5,
+			"description": "เข้าเล่น mission ในมิติที่ 5 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "95vbtkaonLpFLeVVA6vebz",
+			"dimension": 5,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 5 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "oXZccnGbJyotAuV1HVAW7s",
+			"dimension": 5,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 5 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "naPsHPxccAM9LjTB9U9k5y",
+			"dimension": 5,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 5 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "j5eEGa4pUsFwyE1epUuwsY",
+			"dimension": 5,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 5 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "8CuPQHRaV7B2ozcPoCDqRc",
+			"dimension": 6,
+			"description": "ทำแบบทดสอบในมิติที่ 6 มากกว่า 5 ข้อขึ้นไป",
+			"goal": 5,
+			"weight": 1
+		},
+		{
+			"id": "18JhvW91yotqgSDaAQsAHw",
+			"dimension": 6,
+			"description": "ทำแบบทดสอบในมิติที่ 6 มากกว่า 10 ข้อขึ้นไป",
+			"goal": 10,
+			"weight": 2
+		},
+		{
+			"id": "cCd1jgv4z9hSp1wYsP7vKN",
+			"dimension": 6,
+			"description": "ทำแบบทดสอบในมิติที่ 6 มากกว่า 20 ข้อขึ้นไป",
+			"goal": 20,
+			"weight": 3
+		},
+		{
+			"id": "skBgLH3ohXQV8A8Pkmn1oi",
+			"dimension": 6,
+			"description": "เข้าเล่น mission ในมิติที่ 6 อย่างน้อยหนึ่งครั้ง",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "cDdrvpPezzSfFYGv3vD1z4",
+			"dimension": 6,
+			"description": "เข้าเล่น mission ในมิติที่ 6 อย่างน้อยหนึ่งครั้ง และปฎิบัติภารกิจจนสำเร็จ",
+			"goal": 1,
+			"weight": 2
+		},
+		{
+			"id": "f3Ewv6DwJNqYzkChQstKo1",
+			"dimension": 6,
+			"description": "เข้าเล่น mission ในมิติที่ 6 และปฎิบัติภารกิจได้อย่างสมบูรณ์แบบ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "4F35qzx2Qtt9seh9CcAo6t",
+			"dimension": 6,
+			"description": "ทำแบบประเมินก่อนเล่นในมิติที่ 6 ",
+			"goal": 1,
+			"weight": 1
+		},
+		{
+			"id": "2jVu3qgd39Qkxf13Xpm3iN",
+			"dimension": 6,
+			"description": "ทำแบบประเมินหลังเล่นในมิติที่ 6 ",
+			"goal": 1,
+			"weight": 3
+		},
+		{
+			"id": "jp6tWsNCtDi8VEtPToKqeb",
+			"dimension": 6,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 6 อย่างน้อย 3 เหรียญ",
+			"goal": 3,
+			"weight": 1
+		},
+		{
+			"id": "cz2B3w1uQbFXixH5MWYArW",
+			"dimension": 6,
+			"description": "ได้รับเหรียญตราในหมวดภารกิจที่ 6 ครบทุกเหรียญ",
+			"goal": 1,
+			"weight": 3
+		}
+	]
+}

@@ -17,7 +17,7 @@ public class QuestionPool : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
+    public Dimension currentDimension;
     public List<QuestionData> questions_unanswered = new List<QuestionData>();
     public List<QuestionData> questions_all = new List<QuestionData>();
 

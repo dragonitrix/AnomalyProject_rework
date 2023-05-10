@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class QuestionTestManager : MonoBehaviour
 {
-
+    public Dimension dimension;
     public GameObject page_prefab;
     public GameObject resultDetail_prefab;
 
@@ -35,6 +35,7 @@ public class QuestionTestManager : MonoBehaviour
 
     public void InitTest()
     {
+        dimension = QuestionPool.instance.currentDimension;
         NewBatch();
     }
 
@@ -140,6 +141,7 @@ public class QuestionTestManager : MonoBehaviour
                 //Debug.Log("new batch");
                 //NewBatch();
                 ShowResult();
+                AchievementManager.instance.UpdateAchievement_Test(dimension);
             });
         });
 
@@ -181,7 +183,7 @@ public class QuestionTestManager : MonoBehaviour
         var result = currentQuestion.answer == index;
 
         var answer = new Answer(
-            PlayerInfoManager.instance.CurrentPlayerId,
+            PlayerInfoManager.instance.currentPlayerId,
             AnswerType._TEST,
             currentQuestion.id,
             currentQuestion.dimension,

@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
         ShowLoadOverlay(LoadOverlayType._BIG);
         DatabaseManagerMongo.instance.FetchUnansweredQuestion((int)dimension, (all, unanswered) =>
         {
+            QuestionPool.instance.currentDimension = dimension;
             QuestionPool.instance.questions_all = all;
             QuestionPool.instance.questions_unanswered = unanswered;
             QuestionPool.instance.questions_unanswered.Shuffle();
@@ -84,7 +85,7 @@ public class GameManager : MonoBehaviour
         });
     }
 
-    public void PrepareAndGoToEvalScene(Dimension dimension,bool redirectToMission = false)
+    public void PrepareAndGoToEvalScene(Dimension dimension, bool redirectToMission = false)
     {
         Debug.Log("PrepareAndGoToEvalScene: " + dimension);
         ShowLoadOverlay(LoadOverlayType._BIG);
@@ -126,6 +127,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
 
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {

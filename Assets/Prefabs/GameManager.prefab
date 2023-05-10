@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 8403161665749575717}
   - component: {fileID: 3248739950198243351}
   - component: {fileID: 2138744923}
+  - component: {fileID: 8551419397766649286}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -492,10 +493,12 @@ MonoBehaviour:
     fullname: 
     faculty: 
     uni: 
+    evalStatus: 
   score:
     id: 
     dimensionAnswers: []
     evalAnswers: []
+  achievementProgresses: []
 --- !u!114 &8403161665749575717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,6 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6fa340d290dc3c4e92d8c0748cee0a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentDimension: 0
   questions_unanswered: []
   questions_all: []
 --- !u!114 &3248739950198243351
@@ -522,7 +526,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6106894488f3c0d48b99a6edcce05680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentDimension: 0
   evals: []
+  redirectToMission: 0
 --- !u!114 &2138744923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,6 +542,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transtitionTime: 0
+--- !u!114 &8551419397766649286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8403161665749575712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4c63ca02aeb8b4f886351161b1fa01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementGroup: {fileID: 11400000, guid: 86b0c6bd7ff33874d932dfea733f6387, type: 2}
 --- !u!1 &8403161665856489106
 GameObject:
   m_ObjectHideFlags: 0

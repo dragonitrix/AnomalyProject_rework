@@ -32,6 +32,8 @@ public class MissionManager : MonoBehaviour
 
     public CanvasGroup gameover_panel;
 
+    public bool isPerfectScore = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +135,7 @@ public class MissionManager : MonoBehaviour
     public void OnMissionFinished()
     {
         Debug.Log("mission finished");
+        AchievementManager.instance.UpdateAchievement_Mission(dimension, health_current <= 0, isPerfectScore);
     }
 
     public void MovePrev()

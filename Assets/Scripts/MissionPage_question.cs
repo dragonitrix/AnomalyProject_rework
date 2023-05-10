@@ -73,7 +73,11 @@ public class MissionPage_question : MissionPage
         var result = CheckAnswer(index);
         ShowResult(result);
 
-        if (!result) manager.DeductHealth(1);
+        if (!result)
+        {
+            manager.DeductHealth(1);
+            manager.isPerfectScore = false;
+        }
 
     }
 

@@ -106,14 +106,7 @@ public class LoginManager : MonoBehaviour
     {
         DatabaseManagerMongo.instance.GetPlayerInfo(id, (data) =>
         {
-            try
-            {
-                OnLoginComplete();
-            }
-            catch (System.Exception)
-            {
-                Alert("an error occurred");
-            }
+            OnLoginComplete();
         });
     }
 

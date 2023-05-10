@@ -54,8 +54,11 @@ public class EvalTestManager : MonoBehaviour
 
         FetchAllResult();
 
-        if (!PlayerInfoManager.instance.GetEvalStatus(EvalPool.instance.currentDimension))
+        var preTestFlag = false;
+
+        if (!PlayerInfoManager.instance.GetEvalStatus(EvalPool.instance.currentDimension)) //pre test detected
         {
+            preTestFlag = true;
             PlayerInfoManager.instance.SetEvalStatus(EvalPool.instance.currentDimension, true);
         }
 
@@ -65,16 +68,18 @@ public class EvalTestManager : MonoBehaviour
             currentAnswer.Clear();
             GameManager.instance.UpdatePlayerInfo((data) =>
             {
-                //do something
-                if (redirectToMission)
+                AchievementManager.instance.UpdateAchievement_Eval(dimension, preTestFlag, () =>
                 {
-                    GameManager.instance.GoToMission(dimension);
-                }
-                else
-                {
-                    GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
-                }
-
+                    //do something
+                    if (redirectToMission)
+                    {
+                        GameManager.instance.GoToMission(dimension);
+                    }
+                    else
+                    {
+                        GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
+                    }
+                });
             });
         });
 
@@ -91,7 +96,7 @@ public class EvalTestManager : MonoBehaviour
             var aType = !PlayerInfoManager.instance.GetEvalStatus(q.dimension) ? AnswerType._EVAL_PRE : AnswerType._EVAL_POST;
 
             var a = new Answer(
-                PlayerInfoManager.instance.CurrentPlayerId,
+                PlayerInfoManager.instance.currentPlayerId,
                 aType,
                 q.id,
                 q.dimension,
