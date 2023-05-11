@@ -16,9 +16,11 @@ public class DialogueController : MonoBehaviour
 
     public bool isClickable = false;
 
+    public string chatSFXOverride = "";
+
     public virtual void InitDialogue()
     {
-        Debug.Log("InitDialogue");
+        //Debug.Log("InitDialogue");
         SetInteractable(false);
     }
 
@@ -51,7 +53,7 @@ public class DialogueController : MonoBehaviour
 
     public virtual void SetCurrentDialogue()
     {
-
+        AudioManager.instance.PlaySound(chatSFXOverride == "" ? "chat" : chatSFXOverride);
     }
 
     public virtual void OnFinished()

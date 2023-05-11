@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -21,12 +22,32 @@ public class GameManager : MonoBehaviour
 
     public CanvasGroup small_loadOverlay;
     public CanvasGroup big_loadOverlay;
+
+    public CanvasGroup session_overlay;
+    public TextMeshProUGUI session_text;
+
+    public string currentSession = "";
+
     // Start is called before the first frame update
     void Start()
     {
         HideLoadOverlay(LoadOverlayType._ALL);
 
-        //var groupid = URLParameters.GetSearchParameters()["groupid"];
+        var groupid = DatabaseManagerMongo.instance.TryGetGroupID();
+
+        if (groupid != null)
+        {
+            currentSession = groupid;
+            session_text.text = groupid;
+            session_overlay.alpha = 1;
+        }
+        else
+        {
+            session_overlay.alpha = 0;
+        }
+
+        AudioManager.instance.PlayBGM("bgm_1");
+
         //
         //var path = URLParameters.location_pathname();
         //

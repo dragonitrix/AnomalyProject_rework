@@ -10,12 +10,12 @@ public class MissionPage : MonoBehaviour
 
     public virtual void InitPage()
     {
-        Debug.Log("init page");
+        //Debug.Log("init page");
     }
 
     public virtual void StartPage()
     {
-        Debug.Log("start page");
+        //Debug.Log("start page");
 
     }
     public virtual void FinishPage()
@@ -24,7 +24,7 @@ public class MissionPage : MonoBehaviour
         {
             return;
         }
-        Debug.Log("finish page");
+        //Debug.Log("finish page");
         isFinished = true;
         manager.OnCurrentPageFinished();
     }

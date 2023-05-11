@@ -44,6 +44,9 @@ public class MissionManager : MonoBehaviour
 
         health_current = health_starting;
         health_bar.InitHealthBar(health_current, health_starting);
+
+        AudioManager.instance.PlayBGM("bgm_2");
+
     }
 
     public void FetchPages()

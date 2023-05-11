@@ -27,6 +27,9 @@ public class MainMenuManager : MonoBehaviour
 
         //pretestPopup.onCancle = OnPretestCancle;
         //pretestPopup.onConfirm = OnPretestConfirm;
+
+        AudioManager.instance.PlayBGM("bgm_1");
+
     }
 
 

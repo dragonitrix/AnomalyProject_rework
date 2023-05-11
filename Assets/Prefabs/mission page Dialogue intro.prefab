@@ -107,6 +107,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   isFinished: 0
   controller: {fileID: 3658787523011975420}
+  dialogueSet: {fileID: 0}
   bgCanvasGroup: {fileID: 0}
 --- !u!1 &3658787523011975408
 GameObject:
@@ -202,6 +203,7 @@ MonoBehaviour:
   dialogueSet: {fileID: 11400000, guid: 7db373ca1091bec44b91189e463dfbfe, type: 2}
   canvasGroup: {fileID: 4953782451015860112}
   isClickable: 1
+  chatSFXOverride: chat_swoosh
   dialoguePiece_prefab: {fileID: 4776899445930468593, guid: 75b617cbf200ce74f89104fdaa7406e3, type: 3}
   dialogue_panel_main: {fileID: 3658787523011975409}
   dialogue_panel_content: {fileID: 6254509434453102616}

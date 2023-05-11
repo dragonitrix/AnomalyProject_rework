@@ -86,10 +86,13 @@ public class AchievementPopupController : MonoBehaviour
 
     public void Show()
     {
+        //Debug.Log("show archivement");
         DatabaseManagerMongo.instance.FetchAchievementProgress((data) =>
         {
+            //Debug.Log("finished fetched 1");
             AchievementManager.instance.UpdateAchievement_Achievement(() =>
             {
+                //Debug.Log("update Achievement_Achievement");
                 DatabaseManagerMongo.instance.FetchAchievementProgress((data) =>
                 {
                     UpdateSubBadges();

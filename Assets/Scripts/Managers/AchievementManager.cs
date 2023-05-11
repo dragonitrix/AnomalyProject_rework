@@ -141,7 +141,7 @@ public class AchievementManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             var dimension = (Dimension)(i + 1);
-            UpdateAchievement_Achievement(dimension, callback);
+            UpdateAchievement_Achievement(dimension, i == 6 - 1 ? callback : () => { });
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(CanvasGroup))]
 public class CanvasGroupEditor : Editor
@@ -33,6 +34,9 @@ public class CanvasGroupEditor : Editor
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }
+
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+
     }
 
 }

@@ -45,15 +45,20 @@ public class DatabaseManagerMongo : MonoBehaviour
     void Start()
     {
         setupEndpoint();
-        if (mock)
+        if (mock) // fake login
         {
+
+            PlayerInfoManager.instance.SetPlayerAccount(new PlayerAccount(
+                _mockAccountID,
+                "",
+                "mockup@gmail.com"
+                ));
+
             GetPlayerInfo(_mockAccountID, (data) =>
             {
                 Debug.Log("mockID login success");
                 isLoggedin = true;
             });
-            //PlayerInfoManager.instance.account.id = _mockAccountID;
-            //PlayerInfoManager.instance.info.nickname = "kot(mock)";
 
         }
     }
@@ -101,10 +106,12 @@ public class DatabaseManagerMongo : MonoBehaviour
             {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
+                    Debug.Log(uri);
                     Debug.Log("Error: " + webRequest.error);
                     callback(null);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
+                    Debug.Log(uri);
                     Debug.Log("HTTP Error: " + webRequest.error);
                     callback(null);
                     break;
@@ -125,18 +132,28 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     IEnumerator _Regis(string email, string password, string name, System.Action<string> callback)
     {
+        var groupid = TryGetGroupID();
+
         password = SecureHelper.HashSalt(password, _passwordSalt);
         var uri = endpoint + "/register";
         WWWForm form = new WWWForm();
         form.AddField("email", email);
         form.AddField("password", password);
         form.AddField("name", name);
+        if (groupid != null) form.AddField("groupid", groupid);
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
 
         if (result != null)
         {
             var tempinfo = JsonConvert.DeserializeObject<TempPlayerAccount>(result);
+
+            PlayerInfoManager.instance.SetPlayerAccount(new PlayerAccount(
+                tempinfo.id,
+                tempinfo.groupid,
+                tempinfo.email
+                ));
+
             callback(tempinfo.id);
         }
         else
@@ -152,10 +169,13 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     IEnumerator _Login(string email, string password, System.Action<string> callback)
     {
+        var groupid = TryGetGroupID();
+
         //password = SecureHelper.HashSalt(password, _passwordSalt);
         var uri = endpoint + "/login";
         WWWForm form = new WWWForm();
         form.AddField("email", email);
+        if (groupid != null) form.AddField("groupid", groupid);
         //form.AddField("password", password);
         string result = null;
         yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
@@ -168,7 +188,11 @@ public class DatabaseManagerMongo : MonoBehaviour
                 //validate
                 if (ValidatePassword(password, tempinfo.password))
                 {
-                    Debug.Log("pass");
+                    PlayerInfoManager.instance.SetPlayerAccount(new PlayerAccount(
+                        tempinfo.id,
+                        tempinfo.groupid,
+                        tempinfo.email
+                        ));
                     callback(tempinfo.id);
                     tempinfo = null;
                 }
@@ -605,6 +629,8 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     IEnumerator _FetchAchievementProgress(System.Action<List<AchievementProgress>> callback)
     {
+        //Debug.Log("start fetch routine");
+
         var uri = endpoint + "/getAchievementIDs";
         WWWForm form = new WWWForm();
         form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
@@ -648,6 +674,7 @@ public class DatabaseManagerMongo : MonoBehaviour
         //}
         PlayerInfoManager.instance.achievementProgresses.Clear();
         PlayerInfoManager.instance.achievementProgresses = achievementProgresses.ToList();
+        //Debug.Log("finished fetch");
         callback(achievementProgresses);
     }
 
@@ -682,6 +709,20 @@ public class DatabaseManagerMongo : MonoBehaviour
 
         return passwordHash == _passwordHash;
     }
+
+    public string TryGetGroupID()
+    {
+        try
+        {
+            var groupid = URLParameters.GetSearchParameters()["groupid"];
+            return groupid;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
 }
 
 [Serializable]

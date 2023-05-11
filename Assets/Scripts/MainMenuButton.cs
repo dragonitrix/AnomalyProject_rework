@@ -32,6 +32,8 @@ public class MainMenuButton : MonoBehaviour,IPointerClickHandler
     public OnContentClickDelegate onContentClick;
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.instance.PlaySound("click_scifi");
+
         onPanelClick();
         //switch (state)
         //{
@@ -154,6 +156,7 @@ public class MainMenuButton : MonoBehaviour,IPointerClickHandler
 
     public void OnContentClick(int index)
     {
+        AudioManager.instance.PlaySound("click_soft");
         onContentClick(index);
     }
 
