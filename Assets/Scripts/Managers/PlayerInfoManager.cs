@@ -41,6 +41,7 @@ public class PlayerInfoManager : MonoBehaviour
         this.account.id = account.id;
         this.account.groupid = account.groupid;
         this.account.email = account.email;
+        this.account.admin = account.admin;
     }
 
     public void SetPlayerInfo(PlayerInfo info)
@@ -76,15 +77,17 @@ public class PlayerAccount
     public string id;
     public string groupid;
     public string email;
+    public bool admin = false;
 
     public PlayerAccount()
     {
     }
-    public PlayerAccount(string id, string groupid, string email)
+    public PlayerAccount(string id, string groupid, string email,bool admin = false)
     {
         this.id = id;
         this.groupid = groupid;
         this.email = email;
+        this.admin = admin;
     }
 
     public string JSON()

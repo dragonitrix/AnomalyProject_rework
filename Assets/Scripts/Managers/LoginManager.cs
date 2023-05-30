@@ -131,6 +131,12 @@ public class LoginManager : MonoBehaviour
 
     public void OnLoginComplete()
     {
+
+        if (PlayerInfoManager.instance.account.admin)
+        {
+            GameManager.instance.enableAdminFeature();
+        }
+
         GameManager.instance.HideLoadOverlay(GameManager.LoadOverlayType._SMALL);
         GameSceneManager.instance.JumptoScene(GameSceneIndex.sc_mainmenu);
     }

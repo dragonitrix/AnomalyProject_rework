@@ -36,6 +36,8 @@ public class DatabaseManagerMongo : MonoBehaviour
     public bool mock = false;
     public string _mockAccountID;
 
+    public bool mockGroupID = false;
+    public string _mockGroupID;
 
     public bool isLoggedin = false;
 
@@ -44,6 +46,7 @@ public class DatabaseManagerMongo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         setupEndpoint();
         if (mock) // fake login
         {
@@ -175,6 +178,7 @@ public class DatabaseManagerMongo : MonoBehaviour
         var uri = endpoint + "/login";
         WWWForm form = new WWWForm();
         form.AddField("email", email);
+        form.AddField("password", password);
         if (groupid != null) form.AddField("groupid", groupid);
         //form.AddField("password", password);
         string result = null;
@@ -185,20 +189,37 @@ public class DatabaseManagerMongo : MonoBehaviour
             try
             {
                 var tempinfo = JsonConvert.DeserializeObject<TempPlayerAccount>(result);
-                //validate
-                if (ValidatePassword(password, tempinfo.password))
+                if (tempinfo.admin)
                 {
+                    Debug.Log("admin login");
+                    Debug.Log(result);
                     PlayerInfoManager.instance.SetPlayerAccount(new PlayerAccount(
                         tempinfo.id,
                         tempinfo.groupid,
-                        tempinfo.email
+                        tempinfo.email,
+                        tempinfo.admin
                         ));
                     callback(tempinfo.id);
                     tempinfo = null;
                 }
                 else
                 {
-                    callback(null);
+                    //validate
+                    if (ValidatePassword(password, tempinfo.password))
+                    {
+                        PlayerInfoManager.instance.SetPlayerAccount(new PlayerAccount(
+                            tempinfo.id,
+                            tempinfo.groupid,
+                            tempinfo.email,
+                            tempinfo.admin
+                            ));
+                        callback(tempinfo.id);
+                        tempinfo = null;
+                    }
+                    else
+                    {
+                        callback(null);
+                    }
                 }
             }
             catch (Exception)
@@ -701,6 +722,56 @@ public class DatabaseManagerMongo : MonoBehaviour
         //callback("update complete");
     }
 
+
+    public void FetchPlayerScoreInfos(string groupid, System.Action<List<PlayerScoreInfo>> callback)
+    {
+        StartCoroutine(_FetchPlayerScoreInfos(groupid, callback));
+    }
+    IEnumerator _FetchPlayerScoreInfos(string groupid, System.Action<List<PlayerScoreInfo>> callback)
+    {
+        var uri = endpoint + "/getPlayerIDs";
+        WWWForm form = new WWWForm();
+        form.AddField("groupid", groupid);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        //Debug.Log(result);
+
+        var idList = JsonConvert.DeserializeObject<List<string>>(result);
+
+        Debug.Log(idList.Count + " id found");
+
+        List<PlayerScoreInfo> scoreInfos = new List<PlayerScoreInfo>();
+
+        var qURI = endpoint + "/getPlayerScoreInfo";
+        for (int i = 0; i < idList.Count; i++)
+        {
+            var id = idList[i];
+            WWWForm qform = new WWWForm();
+            qform.AddField("playerid", id);
+            string q = null;
+            yield return _SendWebRequest(qURI, qform, (string _result) => { q = _result; });
+
+            if (q != null)
+            {
+                //Debug.Log(q);
+                var scoreInfo = JsonConvert.DeserializeObject<PlayerScoreInfo>(q);
+                scoreInfos.Add(scoreInfo);
+            }
+            else
+            {
+                Debug.Log("something wrong");
+            }
+        }
+        callback(scoreInfos);
+    }
+
     private static string _passwordSalt = "anmly";
 
     private bool ValidatePassword(string _password, string _passwordHash)
@@ -712,6 +783,11 @@ public class DatabaseManagerMongo : MonoBehaviour
 
     public string TryGetGroupID()
     {
+        if (mockGroupID)
+        {
+            return _mockGroupID;
+        }
+
         try
         {
             var groupid = URLParameters.GetSearchParameters()["groupid"];
@@ -738,6 +814,7 @@ public class TempPlayerAccount
     public string email;
     public string password;
     public string groupid;
+    public bool admin = false;
 }
 
 // future implementation

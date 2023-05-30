@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     public string currentSession = "";
 
+    public delegate void EnableAdminFeatureDelegate();
+    public EnableAdminFeatureDelegate enableAdminFeature = () => { };
+
     // Start is called before the first frame update
     void Start()
     {

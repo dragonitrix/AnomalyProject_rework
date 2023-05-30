@@ -12,6 +12,8 @@ public class MainMenuManager : MonoBehaviour
 
     public SimplePopup pretestPopup;
 
+    public CanvasGroup admin_btn;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +31,11 @@ public class MainMenuManager : MonoBehaviour
         //pretestPopup.onConfirm = OnPretestConfirm;
 
         AudioManager.instance.PlayBGM("bgm_1");
+
+        if (PlayerInfoManager.instance.account.admin)
+        {
+            admin_btn.ShowAll();
+        }
 
     }
 
