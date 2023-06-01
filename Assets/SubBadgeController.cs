@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +13,17 @@ public class SubBadgeController : MonoBehaviour
     public CanvasGroup frame_complete;
     public Image badgeIcon_normal;
     public Image badgeIcon_complete;
+    public RectTransform badgeIcon_bg;
+    public RectTransform badgeIcon_mask;
     public RectTransform taskPanel;
     public SimpleProgressbar mainProgressbar;
+    public TextMeshProUGUI title_text;
 
     public List<Achievement> achievements = new List<Achievement>();
     public List<AchievementTask> achievementTasks = new List<AchievementTask>();
+
+    [TextArea(0, 5)]
+    public List<string> titles = new List<string>();
 
     public List<Sprite> icons_normal = new List<Sprite>();
     public List<Sprite> icons_complete = new List<Sprite>();
@@ -34,6 +41,11 @@ public class SubBadgeController : MonoBehaviour
 
         badgeIcon_normal.sprite = icons_normal[(int)dimension - 1];
         badgeIcon_complete.sprite = icons_complete[(int)dimension - 1];
+        badgeIcon_normal.SetNativeSize();
+        badgeIcon_complete.SetNativeSize();
+
+        title_text.text = titles[(int)dimension - 1];
+
     }
 
     public void Init()
@@ -72,20 +84,22 @@ public class SubBadgeController : MonoBehaviour
 
         this.completeCount = completeCount;
 
-        var mainVal = (float)completeCount / (float)achievements.Count;
+        var mainVal = Mathf.Clamp01((float)completeCount / (float)achievements.Count);
 
         mainProgressbar.SetValue(mainVal);
-        mainProgressbar.SetText((mainVal*100f).ToString()+"%");
+        mainProgressbar.SetText((mainVal * 100f).ToString() + "%");
+
+        badgeIcon_mask.sizeDelta = new Vector2(badgeIcon_bg.sizeDelta.x, badgeIcon_bg.sizeDelta.y * mainVal);
 
         if (completeCount >= achievements.Count)
         {
             frame_normal.alpha = 0;
             frame_complete.alpha = 1;
-            badgeIcon_complete.GetComponent<CanvasGroup>().alpha = 1;
+            //badgeIcon_complete.GetComponent<CanvasGroup>().alpha = 1;
 
             complete = true;
         }
-        Resize();
+        Resize(true);
     }
 
     // Start is called before the first frame update
@@ -99,11 +113,11 @@ public class SubBadgeController : MonoBehaviour
     {
 
     }
-    void Resize(bool jumptolast = false)
+    void Resize(bool jumptotop = false)
     {
-        StartCoroutine(_resize(jumptolast));
+        StartCoroutine(_resize(jumptotop));
     }
-    IEnumerator _resize(bool jumptolast)
+    IEnumerator _resize(bool jumptotop)
     {
         yield return new WaitForEndOfFrame();
         var totalY = 0f;
@@ -120,7 +134,7 @@ public class SubBadgeController : MonoBehaviour
             taskPanel.sizeDelta.x,
             totalY
         );
-        if (jumptolast)
+        if (jumptotop)
         {
             taskPanel.anchoredPosition = new Vector2(
                 taskPanel.anchoredPosition.x,

@@ -25,7 +25,8 @@ public class AchievementPopupController : MonoBehaviour
 
     public GameObject subbadge_prefab;
     public RectTransform subbadgePanel;
-    public CanvasGroup icon_complete;
+    public RectTransform icon_rect;
+    public RectTransform icon_mask;
 
     public SimpleProgressbar mainProgressbar;
 
@@ -61,15 +62,14 @@ public class AchievementPopupController : MonoBehaviour
         }
 
 
-        float progressValue = (float)completeCount / (float)totalCount;
+        float progressValue = Mathf.Clamp01((float)completeCount / (float)totalCount);
 
         mainProgressbar.SetValue(progressValue);
         mainProgressbar.SetText((progressValue * 100f).ToString("00") + "%");
 
-        if (completeCount == totalCount)
-        {
-            icon_complete.alpha = 1;
-        }
+
+        icon_mask.sizeDelta = new Vector2(icon_rect.sizeDelta.x, icon_rect.sizeDelta.y * progressValue);
+
     }
 
     // Start is called before the first frame update
