@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HangmanController : MonoBehaviour
 {
@@ -31,8 +32,8 @@ public class HangmanController : MonoBehaviour
     public delegate void OnHangmanGameFinished(bool result);
     public OnHangmanGameFinished onHangmanGameFinished = (result) => { };
 
-    int correctCount = 0;
-    string nonDupe = "";
+    public int correctCount = 0;
+    public string nonDupe = "";
     public int health = 7;
 
     public HealthBar healthBar;
@@ -41,25 +42,23 @@ public class HangmanController : MonoBehaviour
 
     bool result;
 
+    public string word;
+
     public void InitHangmanGame()
     {
         //pick word
 
-        hangmanText = hangmanTextPool.hangmanTexts[UnityEngine.Random.Range(0, hangmanTextPool.hangmanTexts.Count)];
-
         InitKeypad();
-        InitWord();
 
         healthBar.InitHealthBar(health, health);
 
-        for (int i = 0; i < firstHint; i++)
-        {
-            Hint();
-        }
+        InitWord();
 
         mainPanel.HideAll();
 
     }
+
+
 
     public void StartHangmanGame()
     {
@@ -68,29 +67,90 @@ public class HangmanController : MonoBehaviour
 
     public void Hint()
     {
+        //Debug.Log("hint");
         //hint
         var hintchar = nonDupe[UnityEngine.Random.Range(0, nonDupe.Length)].ToString();
+        if (!keys[hintchar].canvasGroup.interactable)
+        {
+            //Debug.Log("dupe hint?");
+            Hint();
+            return;
+        }
         OnKeypadClick(hintchar);
     }
 
+    [ContextMenu("InitWord")]
     void InitWord()
     {
+        //reset keys
+        foreach (var key in keys.Values)
+        {
+            key.EnableKey();
+        }
+
+        correctCount = 0;
+
+        foreach (Transform item in charGroup)
+        {
+            Destroy(item.gameObject);
+        }
+
+        //random word
+        hangmanText = hangmanTextPool.hangmanTexts[UnityEngine.Random.Range(0, hangmanTextPool.hangmanTexts.Count)];
+
         hintMesh.text = hangmanText.hint;
 
+        this.word = hangmanText.word;
         var word = hangmanText.word;
+
+        if (word.Contains(' '))
+        {
+            Debug.Log("space detected");
+        }
+
+        var wordgroup = word.Split(' ');
+
+        for (int i = 0; i < wordgroup.Length; i++)
+        {
+            var currentWord = wordgroup[i];
+            var row = Instantiate(new GameObject("row"), charGroup);
+
+            var rect = row.AddComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(charGroup.sizeDelta.x, 70f);
+
+            var layout = row.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 5f;
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            for (int j = 0; j < currentWord.Length; j++)
+            {
+                var clone = Instantiate(char_prefab, rect);
+                var charScript = clone.GetComponent<HangmanChar>();
+                charScript.InitChar(currentWord[j].ToString());
+                chars.Add(charScript);
+            }
+        }
+
         nonDupe = "";
         for (int i = 0; i < word.Length; i++)
         {
-            if (!nonDupe.Contains(word[i]))
+            if (!nonDupe.Contains(word[i]) && word[i] != ' ')
             {
                 nonDupe += word[i];
             }
-
-            var clone = Instantiate(char_prefab, charGroup);
-            var charScript = clone.GetComponent<HangmanChar>();
-            charScript.InitChar(word[i].ToString());
-            chars.Add(charScript);
         }
+
+
+        for (int i = 0; i < firstHint; i++)
+        {
+            Hint();
+        }
+
     }
 
     void InitKeypad()
@@ -101,7 +161,7 @@ public class HangmanController : MonoBehaviour
             var clone = Instantiate(key_prefab, keyGroup);
             var key = clone.GetComponent<HangmanKey>();
 
-            key.InitKey(character,this);
+            key.InitKey(character, this);
 
             keys.Add(character, key);
         }
@@ -116,7 +176,7 @@ public class HangmanController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnKeypadClick(string character)
@@ -192,6 +252,6 @@ public class HangmanController : MonoBehaviour
 public class HangmanText
 {
     public string word;
-    [TextArea(5,10)]
+    [TextArea(5, 10)]
     public string hint;
 }

@@ -11,6 +11,7 @@ public class MissionPage_hangman : MissionPage
     public Button accept_button;
     public Button declined_button;
 
+    [ContextMenu("InitPage")]
     public override void InitPage()
     {
         base.InitPage();
@@ -33,6 +34,7 @@ public class MissionPage_hangman : MissionPage
         askPanel.ShowAll();
     }
 
+    [ContextMenu("OnAccept")]
     public void OnAccept()
     {
         askPanel.HideAll();

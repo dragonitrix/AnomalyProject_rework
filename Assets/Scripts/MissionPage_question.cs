@@ -73,6 +73,16 @@ public class MissionPage_question : MissionPage
         var result = CheckAnswer(index);
         ShowResult(result);
 
+        switch (result)
+        {
+            case true:
+                choices[index].OnCorrectAnswer();
+                break;
+            case false:
+                choices[index].OnWrongAnswer();
+                break;
+        }
+
         if (!result)
         {
             manager.DeductHealth(1);

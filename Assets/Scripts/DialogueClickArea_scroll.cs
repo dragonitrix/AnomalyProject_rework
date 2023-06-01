@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DialogueClickArea_scroll : DialogueClickArea, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public class DialogueClickArea_scroll : DialogueClickArea, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler,IScrollHandler
 {
     public ScrollRect scrollRect;
     private Vector3 mousePosOnDragStart;
@@ -40,6 +40,14 @@ public class DialogueClickArea_scroll : DialogueClickArea, IBeginDragHandler, ID
         //Debug.Log("OnEndDrag");
         ExecuteEvents.Execute(scrollRect.gameObject, pointerEventData, ExecuteEvents.endDragHandler);
         passingEvent = false;
+    }
+
+    public void OnScroll(PointerEventData eventData)
+    {
+        //("OnScroll - passing on scroll message so buttons dont steal it");
+        //in order to have mousewheel scrolling and clickable buttons we need to intercept the scroll and pass it or it wont work!
+        //this is because buttons steal the focus and stop the scrolling.
+        ExecuteEvents.Execute(scrollRect.gameObject, eventData, ExecuteEvents.scrollHandler);
     }
 
     public override void OnPointerClick(PointerEventData eventData)

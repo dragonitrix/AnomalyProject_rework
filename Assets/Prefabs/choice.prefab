@@ -107,7 +107,9 @@ MonoBehaviour:
   textMesh: {fileID: 1341460945289785118}
   controller: {fileID: 0}
   index: 0
-  tintColor: {r: 0.40444446, g: 0.37254903, b: 0.8235294, a: 1}
+  hover_tintColor: {r: 0.40444446, g: 0.37254903, b: 0.8235294, a: 1}
+  correct_tintColor: {r: 0.15619439, g: 0.735849, b: 0.44450676, a: 1}
+  wrong_tintColor: {r: 0.7830189, g: 0.2781631, b: 0.21052866, a: 1}
 --- !u!1 &1341460945289785112
 GameObject:
   m_ObjectHideFlags: 0

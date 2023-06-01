@@ -37,4 +37,10 @@ public class HangmanKey : MonoBehaviour
         canvasGroup.interactable = false;
     }
 
+    public void EnableKey()
+    {
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+    }
+
 }
