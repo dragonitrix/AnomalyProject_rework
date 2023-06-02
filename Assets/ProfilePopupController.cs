@@ -15,6 +15,8 @@ public class ProfilePopupController : MonoBehaviour
     public CanvasGroup contentCanvasGroup;
     public CanvasGroup overlayCanvasGroup;
 
+    public CanvasGroup editCanvasGroup;
+
     public enum GraphType
     {
         PRE_TEST = 2,
@@ -29,6 +31,14 @@ public class ProfilePopupController : MonoBehaviour
     [Header("text")]
     public TextMeshProUGUI name_text;
     public TextMeshProUGUI email_text;
+    public TextMeshProUGUI fullname_text;
+    public TextMeshProUGUI faculty_text;
+    public TextMeshProUGUI uni_text;
+
+    public TMP_InputField name_inputField;
+    public TMP_InputField fullname_inputField;
+    public TMP_InputField faculty_inputField;
+    public TMP_InputField uni_inputField;
 
     bool isGettingGraphValue = false;
 
@@ -74,16 +84,17 @@ public class ProfilePopupController : MonoBehaviour
     }
     public void Show()
     {
-        name_text.text = PlayerInfoManager.instance.info.nickname;
-        email_text.text = PlayerInfoManager.instance.account.email;
+        UpdateProfileText();
 
         GetGraphValue(GraphType.PRE_TEST, true); // forced
         mainCanvasGroup.ShowAll();
         contentCanvasGroup.HideAll();
+        editCanvasGroup.HideAll();
     }
     public void Hide()
     {
         mainCanvasGroup.HideAll();
+        editCanvasGroup.HideAll();
     }
 
     public void OnPreClick()
@@ -93,6 +104,46 @@ public class ProfilePopupController : MonoBehaviour
     public void OnPostClick()
     {
         GetGraphValue(GraphType.POST_TEST);
+    }
+
+
+
+    public void OnEditClick()
+    {
+        name_inputField.text = PlayerInfoManager.instance.info.nickname;
+        fullname_inputField.text = PlayerInfoManager.instance.info.fullname;
+        faculty_inputField.text = PlayerInfoManager.instance.info.faculty;
+        uni_inputField.text = PlayerInfoManager.instance.info.uni;
+
+        editCanvasGroup.ShowAll();
+    }
+    public void OnCloseEditClick()
+    {
+        editCanvasGroup.HideAll();
+    }
+
+    public void OnEditSubmitClick()
+    {
+        PlayerInfoManager.instance.info.nickname = name_inputField.text;
+        PlayerInfoManager.instance.info.fullname = fullname_inputField.text;
+        PlayerInfoManager.instance.info.faculty = faculty_inputField.text;
+        PlayerInfoManager.instance.info.uni = uni_inputField.text;
+
+        DatabaseManagerMongo.instance.UpdatePlayerInfo((data) =>
+        {
+            UpdateProfileText();
+            editCanvasGroup.HideAll();
+        });
+    }
+
+    public void UpdateProfileText()
+    {
+        name_text.text = "" + PlayerInfoManager.instance.info.nickname;
+        email_text.text = "" + PlayerInfoManager.instance.account.email;
+        fullname_text.text= "fullname: " + PlayerInfoManager.instance.info.fullname;
+        faculty_text.text= "faculty: " + PlayerInfoManager.instance.info.faculty;
+        uni_text.text= "university: " + PlayerInfoManager.instance.info.uni;
+
     }
 
 }

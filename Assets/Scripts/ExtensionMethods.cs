@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public static class ExtensionMethods
 {
@@ -84,4 +85,51 @@ public static class ExtensionMethods
         }
         return _evals;
     }
+
+
+
+    public static List<float> GetSDs(List<List<float>> list)
+    {
+        var result = new List<float>();
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            result.Add(GetSD(list[i]));
+        }
+
+        return result;
+    }
+
+    public static float GetSD(List<float> values)
+    {
+        float standardDeviation = 0;
+
+        if (values.Any())
+        {
+            // Compute the average.     
+            float avg = values.Average();
+
+            // Perform the Sum of (value-avg)_2_2.      
+            float sum = values.Sum(d => Mathf.Pow(d - avg, 2));
+
+            // Put it all together.      
+            standardDeviation = Mathf.Sqrt((sum) / (values.Count() - 1));
+        }
+
+        return standardDeviation;
+    }
+
+    public static float GetAVG(List<float> floats)
+    {
+        float avg = 0;
+
+        for (int i = 0; i < floats.Count; i++)
+        {
+            avg += floats[i];
+        }
+        avg /= floats.Count;
+
+        return avg;
+    }
+
 }

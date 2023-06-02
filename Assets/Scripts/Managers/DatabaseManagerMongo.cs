@@ -722,6 +722,31 @@ public class DatabaseManagerMongo : MonoBehaviour
         //callback("update complete");
     }
 
+    public void FetchGroupScores(string groupid, System.Action<GroupScores> callback)
+    {
+        StartCoroutine(_FetchGroupScores(groupid, callback));
+    }
+
+    IEnumerator _FetchGroupScores(string groupid, System.Action<GroupScores> callback)
+    {
+        var uri = endpoint + "/getOverallScore";
+        WWWForm form = new WWWForm();
+        form.AddField("groupid", groupid);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        Debug.Log("raw: ");
+        Debug.Log(result);
+
+        GroupScores groupScores = JsonConvert.DeserializeObject<GroupScores>(result);
+        //groupScores.Log();
+        callback(groupScores);
+    }
 
     public void FetchPlayerScoreInfos(string groupid, System.Action<List<PlayerScoreInfo>> callback)
     {

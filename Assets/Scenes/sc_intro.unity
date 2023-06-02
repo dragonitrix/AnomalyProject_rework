@@ -4869,11 +4869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8403161665749575715, guid: d8f410147f673ad41aa9187c81266259, type: 3}
       propertyPath: mockGroupID
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8403161665749575715, guid: d8f410147f673ad41aa9187c81266259, type: 3}
       propertyPath: _mockGroupID
-      value: bHEmBJ
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8881489205152767097, guid: d8f410147f673ad41aa9187c81266259, type: 3}
       propertyPath: m_AnchorMax.y
