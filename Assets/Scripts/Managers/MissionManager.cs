@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DigitalRuby.Tween;
+using System;
+using Newtonsoft.Json;
 
 public class MissionManager : MonoBehaviour
 {
@@ -34,6 +36,8 @@ public class MissionManager : MonoBehaviour
 
     public bool isPerfectScore = true;
 
+    public MissionExplanation missionExplanation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +50,14 @@ public class MissionManager : MonoBehaviour
         health_bar.InitHealthBar(health_current, health_starting);
 
         AudioManager.instance.PlayBGM("bgm_2");
+
+        //Load text from a JSON file (Assets/Resources/Text/jsonFile01.json)
+        var filename = "m_" + ((int)dimension);
+        var jsonTextFile = Resources.Load<TextAsset>("Explanations/"+ filename);
+        Debug.Log(filename);
+        //Then use JsonUtility.FromJson<T>() to deserialize jsonTextFile into an object
+
+        missionExplanation = JsonConvert.DeserializeObject<MissionExplanation>(jsonTextFile.text);
 
     }
 
@@ -252,4 +264,17 @@ public class MissionManager : MonoBehaviour
         GameManager.instance.PrepareAndGoToQuestionScene(dimension);
     }
 
+}
+
+[Serializable]
+public class MissionExplanation
+{
+    public List<Explanation> missionExplanation = new List<Explanation>();
+}
+
+[Serializable]
+public class Explanation
+{
+    public string question;
+    public List<string> explanation = new List<string>();
 }

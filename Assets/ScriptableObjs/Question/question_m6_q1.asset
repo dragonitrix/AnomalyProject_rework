@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: question_m6_q1
   m_EditorClassIdentifier: 
   question:
-    id: m1_q1
+    id: m6_q1
     type: 1
     dimension: 6
     question: "\u0E04\u0E38\u0E13\u0E44\u0E14\u0E49 \u0E01\u0E25\u0E31\u0E1A\u0E44\u0E1B\u0E17\u0E1A\u0E17\u0E27\u0E19

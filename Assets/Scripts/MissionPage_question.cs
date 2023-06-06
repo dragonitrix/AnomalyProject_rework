@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEngine.Networking.UnityWebRequest;
-using System.Reflection;
 
 public class MissionPage_question : MissionPage
 {
@@ -18,10 +16,15 @@ public class MissionPage_question : MissionPage
     public TextMeshProUGUI questionText;
     public RectTransform choiceGroup;
     public CanvasGroup resultPanel;
-    public CanvasGroup correctPanel;
-    public CanvasGroup incorrectPanel;
+
+    public CanvasGroup correctTitle;
+    public CanvasGroup incorrectTitle;
+
+    public TextMeshProUGUI explanationText;
 
     List<MissionPage_question_choice> choices = new List<MissionPage_question_choice>();
+
+    int answerIndex = 0;
 
     public override void InitPage()
     {
@@ -56,6 +59,8 @@ public class MissionPage_question : MissionPage
     public void OnQuestionClick(int index)
     {
         //Debug.Log("click: " + index);
+
+        answerIndex = index;
 
         for (int i = 0; i < choices.Count; i++)
         {
@@ -130,12 +135,22 @@ public class MissionPage_question : MissionPage
         resultPanel.ShowAll();
         if (result)
         {
-            correctPanel.alpha = 1;
+            correctTitle.alpha = 1;
+            incorrectTitle.alpha = 0;
         }
         else
         {
-            incorrectPanel.alpha = 1;
+            correctTitle.alpha = 0;
+            incorrectTitle.alpha = 1;
         }
+
+        var id = questionObj.question.id[questionObj.question.id.Length - 1].ToString();
+        var int_id = int.Parse(id);
+
+        var explanation = manager.missionExplanation.missionExplanation[int_id - 1];
+
+        explanationText.text = explanation.explanation[answerIndex];
+
     }
 
 }
