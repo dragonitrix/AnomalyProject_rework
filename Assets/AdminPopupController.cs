@@ -1,12 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AdminPopupController : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void CSVDownloader(string str, string fn);
+
+    public GroupInfo groupInfo;
+
     public CanvasGroup mainCanvasGroup;
     public CanvasGroup contentCanvasGroup;
     public CanvasGroup overlayCanvasGroup;
@@ -31,6 +39,8 @@ public class AdminPopupController : MonoBehaviour
     public List<string> testScoreTexts = new List<string>();
     public List<string> missionScoreTexts = new List<string>();
     public List<string> evalScoreTexts = new List<string>();
+
+    public CSVTemplate csvTemplate;
 
     // Start is called before the first frame update
     void Start()
@@ -164,25 +174,21 @@ public class AdminPopupController : MonoBehaviour
 
     public void Show()
     {
-        //
-        //Debug.Log("groupid: " + PlayerInfoManager.instance.account.groupid);
-        //DatabaseManagerMongo.instance.FetchPlayerScoreInfos(PlayerInfoManager.instance.account.groupid, (data) =>
-        //{
-        //    Debug.Log("fect data complete");
-        //    InitInfos(data);
-        //    contentCanvasGroup.ShowAll();
-        //    overlayCanvasGroup.HideAll();
-        //});
-
-
         Debug.Log("groupid: " + PlayerInfoManager.instance.account.groupid);
-        DatabaseManagerMongo.instance.FetchGroupScores(PlayerInfoManager.instance.account.groupid, (data) =>
+
+        DatabaseManagerMongo.instance.GetGroupInfo(PlayerInfoManager.instance.account.groupid, (data) =>
         {
-            Debug.Log("fect data complete");
-            InitInfos(data);
-            OnTestBtnClick();
-            contentCanvasGroup.ShowAll();
-            overlayCanvasGroup.HideAll();
+            groupInfo = data;
+            groupInfo.Log();
+            DatabaseManagerMongo.instance.FetchGroupScores(PlayerInfoManager.instance.account.groupid, (data) =>
+            {
+                Debug.Log("fect data complete");
+                InitInfos(data);
+                OnTestBtnClick();
+                contentCanvasGroup.ShowAll();
+                overlayCanvasGroup.HideAll();
+            });
+
         });
 
         mainCanvasGroup.ShowAll();
@@ -258,22 +264,140 @@ public class AdminPopupController : MonoBehaviour
         evalScoreDetailPanel.GetComponent<CanvasGroup>().ShowAll();
     }
 
+    [ContextMenu("OnExportCSVClick")]
+    public void OnExportCSVClick()
+    {
+        contentCanvasGroup.HideAll();
+        overlayCanvasGroup.ShowAll();
+        RetrivePlayerScoreInfo();
+    }
+
+    public void RetrivePlayerScoreInfo()
+    {
+        DatabaseManagerMongo.instance.FetchPlayerScoreInfos(PlayerInfoManager.instance.account.groupid, (data) =>
+        {
+            Debug.Log("fect data complete");
+            ConvertInfoToCSV(data, true);
+            contentCanvasGroup.ShowAll();
+            overlayCanvasGroup.HideAll();
+        });
+    }
+
+    public string ConvertInfoToCSV(List<PlayerScoreInfo> playerScoreInfos, bool saveToDevice)
+    {
+
+        var mainCSV = new EZcsv(csvTemplate);
+
+        mainCSV.SetData(groupInfo.adminUser, 1, 2);
+        mainCSV.SetData(groupInfo.link, 1, 3);
+        mainCSV.SetData(groupInfo.classStartTime.ToShortDateString(), 1, 4);
+        mainCSV.SetData(groupInfo.studentCount.ToString(), 1, 5);
+
+        for (int i = 0; i < playerScoreInfos.Count; i++)
+        {
+            var pScore = playerScoreInfos[i];
+            var csv = PlayerScore2CSV(pScore);
+            mainCSV.AddRows(csv.datas);
+            string[] blankrow = { "", "", "", "", "", "", "" };
+            mainCSV.AddRow(blankrow.ToList());
+        }
+
+        if (saveToDevice)
+        {
+            ExportCSVToDevice(mainCSV.GetCSVStrings());
+        }
+
+
+        return mainCSV.GetCSVStrings();
+
+    }
+
+    public EZcsv PlayerScore2CSV(PlayerScoreInfo playerScoreInfo)
+    {
+        var csv = new EZcsv(7);
+        var score = playerScoreInfo.playerScore;
+
+        string[] r1 = { playerScoreInfo.email, "", "", "", "", "", "" };
+        csv.AddRow(r1.ToList());
+
+        string[] r2 = { "", "Dimension 1", "Dimension 2", "Dimension 3", "Dimension 4", "Dimension 5", "Dimension 6" };
+        csv.AddRow(r2.ToList());
+
+        string[] r3 = { "Test", "", "", "", "", "", "" };
+        var r3_l = r3.ToList();
+        for (int i = 0; i < score.testScores.Count; i++)
+        {
+            r3_l[i + 1] = score.testScores[i] + " | " + score.testAnswers[i];
+        }
+        csv.AddRow(r3_l);
+
+        string[] r4 = { "Mission", "", "", "", "", "", "" };
+        var r4_l = r4.ToList();
+        for (int i = 0; i < score.missionScores.Count; i++)
+        {
+            r4_l[i + 1] = score.missionScores[i] + " | " + 3;
+        }
+        csv.AddRow(r4_l);
+
+        string[] r5 = { "Pre Test", "", "", "", "", "", "" };
+        var r5_l = r5.ToList();
+        for (int i = 0; i < score.preEvalScores.Count; i++)
+        {
+            r5_l[i + 1] = score.preEvalScores[i] + " | " + 6;
+        }
+        csv.AddRow(r5_l);
+
+        string[] r6 = { "Post Test", "", "", "", "", "", "" };
+        var r6_l = r6.ToList();
+        for (int i = 0; i < score.postEvalScores.Count; i++)
+        {
+            r6_l[i + 1] = score.postEvalScores[i] + " | " + 6;
+        }
+        csv.AddRow(r6_l);
+
+        string csvString = csv.GetCSVStrings();
+
+        //Debug.Log(csvString);
+
+        return csv;
+
+    }
+
+    void ExportCSVToDevice(string csvString)
+    {
+        DateTime dateTime = DateTime.Now;
+        var filename = "export_" + dateTime.ToString("yyyyMMddHHmmss");
+#if !UNITY_EDITOR && UNITY_WEBGL
+        //iphone
+        Debug.Log("Downloading..." + filename);
+        CSVDownloader(csvString, filename);
+#else
+        string parentPath = Application.persistentDataPath + "/ExportData";
+        if (!Directory.Exists(parentPath))
+        {
+            Directory.CreateDirectory(parentPath);
+        }
+        string path = parentPath + "/" + filename + ".csv";
+        System.IO.File.WriteAllText(path, csvString);
+        Debug.Log(path);
+#endif
+    }
 }
 
-[Serializable]
-public class PlayerScoreInfo
-{
-    public string id;
-    public string name;
-    public string email;
-    public List<PlayerScoreProgress> testProgress;
-    public List<PlayerScoreProgress> evalProgress_pre;
-    public List<PlayerScoreProgress> evalProgress_post;
-}
-
-[Serializable]
-public class PlayerScoreProgress
-{
-    public int progress;
-    public int total;
-}
+//[Serializable]
+//public class PlayerScoreInfo
+//{
+//    public string id;
+//    public string name;
+//    public string email;
+//    public List<PlayerScoreProgress> testProgress;
+//    public List<PlayerScoreProgress> evalProgress_pre;
+//    public List<PlayerScoreProgress> evalProgress_post;
+//}
+//
+//[Serializable]
+//public class PlayerScoreProgress
+//{
+//    public int progress;
+//    public int total;
+//}

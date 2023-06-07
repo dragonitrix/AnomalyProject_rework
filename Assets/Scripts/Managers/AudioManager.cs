@@ -102,7 +102,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(string clipname, int channel)
     {
-        Debug.Log("playsound: " + clipname);
+        //Debug.Log("playsound: " + clipname);
         AudioClip clip = null;
         //clips.TryGetValue(clipname,out clip);
 

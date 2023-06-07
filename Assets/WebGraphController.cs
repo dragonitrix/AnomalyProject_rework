@@ -32,8 +32,18 @@ public class WebGraphController : MonoBehaviour
         gameObject.Tween(null, image.color, color, 1f, TweenScaleFunctions.CubicEaseInOut, tweenUpdate, tweenComplete);
     }
 
-    public void SetShapeValue(List<float> val01s)
+    public void SetShapeValue(List<float> vals)
     {
+
+        var val01s = new List<float>();
+
+        for (int i = 0; i < vals.Count; i++)
+        {
+            //Debug.Log("raw val: " + vals[i]);
+            var _01val = (int)vals[i] / 6f;
+            //Debug.Log("clamp: " + _01val);
+            val01s.Add(_01val);
+        }
 
         var targetPos = val01s.ToList();
 

@@ -114,15 +114,3 @@ public class PlayerInfo
 }
 
 
-[Serializable]
-public class PlayerScore
-{
-    public string id;
-    public List<Answer> dimensionAnswers = new List<Answer>();
-    public List<Answer> evalAnswers = new List<Answer>();
-
-    public string JSON()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-}

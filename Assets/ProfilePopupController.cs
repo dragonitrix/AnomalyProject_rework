@@ -86,7 +86,7 @@ public class ProfilePopupController : MonoBehaviour
     {
         UpdateProfileText();
 
-        GetGraphValue(GraphType.PRE_TEST, true); // forced
+        GetGraphValue(GraphType.POST_TEST, true); // forced
         mainCanvasGroup.ShowAll();
         contentCanvasGroup.HideAll();
         editCanvasGroup.HideAll();

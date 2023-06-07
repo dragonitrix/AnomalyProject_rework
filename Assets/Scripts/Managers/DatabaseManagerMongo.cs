@@ -619,6 +619,30 @@ public class DatabaseManagerMongo : MonoBehaviour
     }
 
 
+    public void GetGroupInfo(string groupID, System.Action<GroupInfo> callback)
+    {
+        StartCoroutine(_GetGroupInfo(groupID, callback));
+    }
+
+    IEnumerator _GetGroupInfo(string groupID, System.Action<GroupInfo> callback)
+    {
+        var uri = endpoint + "/getGroupInfo";
+        WWWForm form = new WWWForm();
+        form.AddField("groupID", groupID);
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+
+        if (result == null)
+        {
+            Debug.Log("FAIL");
+            yield break;
+        }
+
+        var groupInfo = JsonConvert.DeserializeObject<GroupInfo>(result);
+
+        callback(groupInfo);
+    }
+
     public void UpdatePlayerAnswers(List<Answer> answers, System.Action<string> callback)
     {
         StartCoroutine(_UpdatePlayerAnswers(answers, callback));
@@ -741,9 +765,9 @@ public class DatabaseManagerMongo : MonoBehaviour
         }
 
         Debug.Log("raw: ");
-        Debug.Log(result);
 
         GroupScores groupScores = JsonConvert.DeserializeObject<GroupScores>(result);
+        Debug.Log(JsonConvert.SerializeObject(groupScores,Formatting.Indented));
         //groupScores.Log();
         callback(groupScores);
     }
@@ -822,6 +846,31 @@ public class DatabaseManagerMongo : MonoBehaviour
         {
             return null;
         }
+    }
+
+
+    public void UpdatePlayerScore_Mission(int dimension,int score, System.Action<string> callback)
+    {
+        StartCoroutine(_UpdatePlayerScore_Mission(dimension,score, callback));
+    }
+    IEnumerator _UpdatePlayerScore_Mission(int dimension, int score, System.Action<string> callback)
+    {
+        var playerID = PlayerInfoManager.instance.currentPlayerId;
+        var uri = endpoint + "/updatePlayerMissionScore";
+
+        WWWForm form = new WWWForm();
+        form.AddField("playerID", PlayerInfoManager.instance.currentPlayerId);
+        form.AddField("dimension", dimension);
+        form.AddField("score", score);
+
+        yield return _SendWebRequest(uri, form, (data) =>
+        {
+            Debug.Log(data);
+        });
+
+        callback("update complete");
+
+        //callback("update complete");
     }
 
 }

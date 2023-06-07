@@ -19,7 +19,7 @@ public class EvalTestManager : MonoBehaviour
     public List<EvalData> currentQuestions = new List<EvalData>();
     public List<Answer> currentAnswer = new List<Answer>();
 
-    public List<EvalQuestionObj_radio> currentQuestionsObj = new List<EvalQuestionObj_radio>();
+    public List<EvalQuestionObj_choice> currentQuestionsObj = new List<EvalQuestionObj_choice>();
 
     public TextMeshProUGUI dimensionText;
 
@@ -33,9 +33,12 @@ public class EvalTestManager : MonoBehaviour
         {
             var q = pool[i];
             var clone = Instantiate(eval_prefab, evalPanel);
-            var script = clone.GetComponent<EvalQuestionObj_radio>();
+            //var script = clone.GetComponent<EvalQuestionObj_radio>();
+            var script = clone.GetComponent<EvalQuestionObj_choice>();
 
+            script.evalData = q;
             script.SetQuestion(q.question);
+            script.SetChoiceText(q.choices);
 
             currentQuestionsObj.Add(script);
         }
@@ -92,6 +95,9 @@ public class EvalTestManager : MonoBehaviour
         {
             var q = currentQuestions[i];
             var q_obj = currentQuestionsObj[i];
+            var answer = q_obj.GetResult() + 1;
+
+            var result = q_obj.evalData.answer == answer;
 
             var aType = !PlayerInfoManager.instance.GetEvalStatus(q.dimension) ? AnswerType._EVAL_PRE : AnswerType._EVAL_POST;
 
@@ -100,8 +106,8 @@ public class EvalTestManager : MonoBehaviour
                 aType,
                 q.id,
                 q.dimension,
-                q_obj.GetResult(),
-                true
+                answer,
+                result
                 );
             currentAnswer.Add(a);
         }

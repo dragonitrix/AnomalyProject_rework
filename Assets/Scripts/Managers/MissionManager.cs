@@ -34,7 +34,10 @@ public class MissionManager : MonoBehaviour
 
     public CanvasGroup gameover_panel;
 
-    public bool isPerfectScore = true;
+    //public bool isPerfectScore = true;
+
+    public int score;
+    public int score_max;
 
     public MissionExplanation missionExplanation;
 
@@ -53,7 +56,7 @@ public class MissionManager : MonoBehaviour
 
         //Load text from a JSON file (Assets/Resources/Text/jsonFile01.json)
         var filename = "m_" + ((int)dimension);
-        var jsonTextFile = Resources.Load<TextAsset>("Explanations/"+ filename);
+        var jsonTextFile = Resources.Load<TextAsset>("Explanations/" + filename);
         Debug.Log(filename);
         //Then use JsonUtility.FromJson<T>() to deserialize jsonTextFile into an object
 
@@ -150,7 +153,14 @@ public class MissionManager : MonoBehaviour
     public void OnMissionFinished()
     {
         Debug.Log("mission finished");
-        AchievementManager.instance.UpdateAchievement_Mission(dimension, health_current <= 0, isPerfectScore);
+
+        var isPerfectScore = score == score_max;
+
+        DatabaseManagerMongo.instance.UpdatePlayerScore_Mission((int)dimension, score, (data) =>
+        {
+            AchievementManager.instance.UpdateAchievement_Mission(dimension, health_current <= 0, isPerfectScore);
+        });
+
     }
 
     public void MovePrev()

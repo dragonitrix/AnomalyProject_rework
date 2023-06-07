@@ -78,9 +78,12 @@ public class MissionPage_question : MissionPage
         var result = CheckAnswer(index);
         ShowResult(result);
 
+        manager.score_max++;
+
         switch (result)
         {
             case true:
+                manager.score++;
                 choices[index].OnCorrectAnswer();
                 break;
             case false:
@@ -88,10 +91,11 @@ public class MissionPage_question : MissionPage
                 break;
         }
 
+
+
         if (!result)
         {
             manager.DeductHealth(1);
-            manager.isPerfectScore = false;
         }
 
     }
