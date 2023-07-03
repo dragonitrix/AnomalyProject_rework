@@ -40,7 +40,8 @@ public class WebGraphController : MonoBehaviour
         for (int i = 0; i < vals.Count; i++)
         {
             //Debug.Log("raw val: " + vals[i]);
-            var _01val = (int)vals[i] / 6f;
+            var _01val = ((int)vals[i]) / 6f;
+            if (i == 1) _01val = 0f;
             //Debug.Log("clamp: " + _01val);
             val01s.Add(_01val);
         }

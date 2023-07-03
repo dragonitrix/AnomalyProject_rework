@@ -39,9 +39,14 @@ public class GraphPieceController : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerEnter(PointerEventData eventData)
     {
         infoCanvasGroup.ShowAll();
+        infoCanvasGroup.blocksRaycasts = false;
+        infoCanvasGroup.interactable = false;
         var rt = infoCanvasGroup.GetComponent<RectTransform>();
         rt.anchoredPosition = new Vector2(mainRect.sizeDelta.x / 2, 0);
         bgRect.GetComponent<CanvasGroup>().alpha = 0.2f;
+
+        transform.SetAsLastSibling();
+
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -39,6 +39,16 @@ public class BarGraphController : MonoBehaviour
         gridController.CreateGrid(2, (int)(graphHeight / subDivision), 2, graphHeight);
     }
 
+    public void SetGraphValue(List<GroupScoreDetail> datas)
+    {
+        var values = new List<float>();
+        for (int i = 0; i < datas.Count; i++)
+        {
+            values.Add(datas[i].count);
+        }
+        SetGraphValue(values);
+    }
+
     public void SetGraphValue(List<float> datas)
     {
         this.datas.Clear();
@@ -60,6 +70,10 @@ public class BarGraphController : MonoBehaviour
             controller.SetHeight((float)datas[i], bar_width, bar_height, bar_group.sizeDelta.y);
             pieces.Add(controller);
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(bar_group);
+
+        bar_group.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;
+
     }
 
     public void SetGraphColor(List<Color> colors)

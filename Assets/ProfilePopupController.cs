@@ -40,6 +40,8 @@ public class ProfilePopupController : MonoBehaviour
     public TMP_InputField faculty_inputField;
     public TMP_InputField uni_inputField;
 
+    public List<TextMeshProUGUI> graph_text;
+
     bool isGettingGraphValue = false;
 
     [ContextMenu("GetGraphValue")]
@@ -68,6 +70,13 @@ public class ProfilePopupController : MonoBehaviour
             overlayCanvasGroup.HideAll();
             contentCanvasGroup.ShowAll();
             isGettingGraphValue = false;
+
+            //set text alpha
+            for (int i = 0; i < data.Count; i++)
+            {
+                graph_text[i].alpha = data[i] != 0f ? 1f : 0.2f;
+            }
+
         });
     }
 

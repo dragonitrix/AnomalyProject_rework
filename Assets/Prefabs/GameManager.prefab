@@ -1164,6 +1164,8 @@ MonoBehaviour:
   mode: 0
   mock: 1
   _mockAccountID: mkStmK1CDJtYn1JqobCWnY
+  mockGroupID: 0
+  _mockGroupID: 
   isLoggedin: 0
   timeoutDuration: 5
 --- !u!114 &8403161665749575716
@@ -1182,6 +1184,7 @@ MonoBehaviour:
     id: 
     groupid: 
     email: 
+    admin: 0
   info:
     id: 
     nickname: 
@@ -1190,9 +1193,12 @@ MonoBehaviour:
     uni: 
     evalStatus: 
   score:
-    id: 
-    dimensionAnswers: []
-    evalAnswers: []
+    playerID: 
+    missionScores: 
+    testScores: 
+    testAnswers: 
+    preEvalScores: 
+    postEvalScores: 
   achievementProgresses: []
 --- !u!114 &8403161665749575717
 MonoBehaviour:
@@ -1249,7 +1255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4c63ca02aeb8b4f886351161b1fa01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  achievementGroup: {fileID: 11400000, guid: 86b0c6bd7ff33874d932dfea733f6387, type: 2}
+  achievementGroup: {fileID: 11400000, guid: 805a7e7775d793340985194c7acf628f, type: 2}
 --- !u!1 &8403161665856489106
 GameObject:
   m_ObjectHideFlags: 0

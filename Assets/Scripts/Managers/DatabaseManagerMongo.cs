@@ -764,10 +764,10 @@ public class DatabaseManagerMongo : MonoBehaviour
             yield break;
         }
 
-        Debug.Log("raw: ");
+        //Debug.Log("raw: ");
 
         GroupScores groupScores = JsonConvert.DeserializeObject<GroupScores>(result);
-        Debug.Log(JsonConvert.SerializeObject(groupScores,Formatting.Indented));
+        //Debug.Log(JsonConvert.SerializeObject(groupScores,Formatting.Indented));
         //groupScores.Log();
         callback(groupScores);
     }
@@ -844,14 +844,14 @@ public class DatabaseManagerMongo : MonoBehaviour
         }
         catch (Exception)
         {
-            return null;
+            return "";
         }
     }
 
 
-    public void UpdatePlayerScore_Mission(int dimension,int score, System.Action<string> callback)
+    public void UpdatePlayerScore_Mission(int dimension, int score, System.Action<string> callback)
     {
-        StartCoroutine(_UpdatePlayerScore_Mission(dimension,score, callback));
+        StartCoroutine(_UpdatePlayerScore_Mission(dimension, score, callback));
     }
     IEnumerator _UpdatePlayerScore_Mission(int dimension, int score, System.Action<string> callback)
     {
@@ -871,6 +871,40 @@ public class DatabaseManagerMongo : MonoBehaviour
         callback("update complete");
 
         //callback("update complete");
+    }
+
+    public enum MessageType
+    {
+        _0_StudentMessage = 0,
+        _1_FeedbackMessage,
+    }
+
+    public void SendMessage(string text, System.Action<string> callback)
+    {
+        StartCoroutine(_SendMessage(text, callback));
+    }
+
+    IEnumerator _SendMessage(string text, System.Action<string> callback)
+    {
+        var uri = endpoint + "/sendMessage";
+
+        WWWForm form = new WWWForm();
+        form.AddField("playerID", PlayerInfoManager.instance.account.id);
+        form.AddField("groupID", TryGetGroupID());
+        form.AddField("text", text);
+
+        Debug.Log("sendMessage");
+
+        string result = null;
+        yield return _SendWebRequest(uri, form, (string _result) => { result = _result; });
+        if (result != null)
+        {
+            callback(result);
+        }
+        else
+        {
+            callback(null);
+        }
     }
 
 }

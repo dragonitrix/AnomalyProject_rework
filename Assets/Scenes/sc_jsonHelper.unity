@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8286394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,12 +149,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8286393}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 018cdd213fb3c584ea5da2be70de232d, type: 3}
+  m_Script: {fileID: 11500000, guid: fa86f23cf0a5095439125fe63aafe9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  json: {fileID: 4900000, guid: fad4af77af50abb43843d39fd114cf57, type: 3}
+  json: {fileID: 4900000, guid: f8158aa75e6f1ab4c92995db6dbccc56, type: 3}
   path: Assets/ScriptableObjs
-  filename: hangmanpool_1
+  filename: g2
 --- !u!4 &8286395
 Transform:
   m_ObjectHideFlags: 0
@@ -215,3 +215,49 @@ MonoBehaviour:
   json: {fileID: 4900000, guid: f8158aa75e6f1ab4c92995db6dbccc56, type: 3}
   path: Assets/ScriptableObjs
   filename: g1
+--- !u!1 &1208474752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208474754}
+  - component: {fileID: 1208474753}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1208474753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208474752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef6593629668ca4eae946a556bf4d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  json: {fileID: 4900000, guid: 2db9539cd3f4b94488572bbefa86d77a, type: 3}
+  path: Assets/ScriptableObjs
+  filename: intro_dialogue_01
+--- !u!4 &1208474754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208474752}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -8,23 +8,19 @@ using UnityEngine;
 public class GroupScores
 {
     public int count;
-    public List<List<float>> testDatas;
-    public List<List<float>> missionDatas;
-    public List<List<float>> evalCounts;
-    public List<List<float>> evalTotals;
-    public List<List<float>> evalAvgs;
+    public List<List<GroupScoreDetail>> testDatas;
+    public List<List<GroupScoreDetail>> missionDatas;
+    public List<List<GroupScoreDetail>> evalDatas;
 
     public void Log()
     {
         Debug.Log(count);
         LogList(testDatas);
         LogList(missionDatas);
-        LogList(evalCounts);
-        LogList(evalTotals);
-        LogList(evalAvgs);
+        LogList(evalDatas);
     }
 
-    public void LogList(List<List<float>> l)
+    public void LogList(List<List<GroupScoreDetail>> l)
     {
         if (l == null)
         {
@@ -38,7 +34,7 @@ public class GroupScores
             text += "\t[ ";
             for (int j = 0; j < l[i].Count; j++)
             {
-                text += l[i][j];
+                text += l[i][j].GetLog();
                 if (j < l[i].Count - 1)
                 {
                     text += ", ";
@@ -51,6 +47,21 @@ public class GroupScores
         }
         text += "]";
         Debug.Log(text);
+    }
+
+
+}
+
+[Serializable]
+public class GroupScoreDetail
+{
+    public float count;
+    public float avg;
+    public float sd;
+
+    public string GetLog()
+    {
+        return $"count: {count} avg: {avg} sd: {sd}";
     }
 
 }

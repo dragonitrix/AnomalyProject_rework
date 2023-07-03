@@ -10,7 +10,7 @@ public class DialoguePiece : MonoBehaviour
     public TextMeshProUGUI textMesh;
     protected string text;
 
-    DialogueController controller;
+    protected DialogueController controller;
 
     public virtual void SetText(DialogueController controller, string text)
     {

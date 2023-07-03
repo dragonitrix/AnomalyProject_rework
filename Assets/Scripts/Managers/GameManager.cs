@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
 
         var groupid = DatabaseManagerMongo.instance.TryGetGroupID();
 
-        if (groupid != null)
+        if (groupid != null && groupid != "")
         {
             currentSession = groupid;
             session_text.text = groupid;

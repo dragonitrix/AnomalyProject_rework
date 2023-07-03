@@ -42,6 +42,13 @@ public class AdminPopupController : MonoBehaviour
 
     public CSVTemplate csvTemplate;
 
+    public Color normalTabColor = Color.white;
+    public Color highlightTabColor = Color.white;
+
+    public Button testBtn;
+    public Button missionBtn;
+    public Button evalBtn;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -103,9 +110,11 @@ public class AdminPopupController : MonoBehaviour
             var ts = new List<List<string>>();
             for (int j = 0; j < groupScores.testDatas[i].Count; j++)
             {
-                var t = new List<string>();
-                t.Add("value: " + groupScores.testDatas[i][j].ToString());
-                t.Add("sd: ?");
+                var t = new List<string>
+                {
+                    "avg: " + groupScores.testDatas[i][j].avg.ToString("F2"),
+                    "sd: "+ groupScores.testDatas[i][j].sd.ToString("F2")
+                };
                 ts.Add(t);
             }
             graph.SetGraphInfoText(ts);
@@ -129,9 +138,12 @@ public class AdminPopupController : MonoBehaviour
             var ts = new List<List<string>>();
             for (int j = 0; j < groupScores.missionDatas[i].Count; j++)
             {
-                var t = new List<string>();
-                t.Add("value: " + groupScores.missionDatas[i][j].ToString());
-                t.Add("sd: ?");
+                var t = new List<string>
+                {
+                    "value: " + groupScores.missionDatas[i][j].count,
+                    ""
+                };
+                //t.Add("sd: ?");
                 ts.Add(t);
             }
             graph.SetGraphInfoText(ts);
@@ -143,21 +155,23 @@ public class AdminPopupController : MonoBehaviour
             clone.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = missionScoreTexts[i];
         }
 
-        for (int i = 0; i < groupScores.evalCounts.Count; i++)
+        for (int i = 0; i < groupScores.evalDatas.Count; i++)
         {
             var clone = Instantiate(graph_prefab, evalScorePanel);
             var graph = clone.GetComponent<BarGraphController>();
             graph.InitGraph(height, 100, subDivision);
-            graph.SetGraphValue(groupScores.evalCounts[i]);
+            graph.SetGraphValue(groupScores.evalDatas[i]);
             graph.SetGraphText($"D{i + 1}");
             graph.SetGraphColor(evalScoreColors);
 
             var ts = new List<List<string>>();
-            for (int j = 0; j < groupScores.evalCounts[i].Count; j++)
+            for (int j = 0; j < groupScores.evalDatas[i].Count; j++)
             {
-                var t = new List<string>();
-                t.Add("value: " + groupScores.evalCounts[i][j].ToString());
-                t.Add("sd: ?");
+                var t = new List<string>
+                {
+                    "avg: " + groupScores.evalDatas[i][j].avg.ToString("F2"),
+                    "sd: "+ groupScores.evalDatas[i][j].sd.ToString("F2")
+                };
                 ts.Add(t);
             }
             graph.SetGraphInfoText(ts);
@@ -234,6 +248,10 @@ public class AdminPopupController : MonoBehaviour
 
     public void OnTestBtnClick()
     {
+        testBtn.GetComponent<Image>().color = highlightTabColor;
+        missionBtn.GetComponent<Image>().color = normalTabColor;
+        evalBtn.GetComponent<Image>().color = normalTabColor;
+
         testScorePanel.GetComponent<CanvasGroup>().ShowAll();
         missionScorePanel.GetComponent<CanvasGroup>().HideAll();
         evalScorePanel.GetComponent<CanvasGroup>().HideAll();
@@ -245,6 +263,10 @@ public class AdminPopupController : MonoBehaviour
     }
     public void OnMissionBtnClick()
     {
+        testBtn.GetComponent<Image>().color = normalTabColor;
+        missionBtn.GetComponent<Image>().color = highlightTabColor;
+        evalBtn.GetComponent<Image>().color = normalTabColor;
+
         testScorePanel.GetComponent<CanvasGroup>().HideAll();
         missionScorePanel.GetComponent<CanvasGroup>().ShowAll();
         evalScorePanel.GetComponent<CanvasGroup>().HideAll();
@@ -255,6 +277,10 @@ public class AdminPopupController : MonoBehaviour
     }
     public void OnEvalBtnClick()
     {
+        testBtn.GetComponent<Image>().color = normalTabColor;
+        missionBtn.GetComponent<Image>().color = normalTabColor;
+        evalBtn.GetComponent<Image>().color = highlightTabColor;
+
         testScorePanel.GetComponent<CanvasGroup>().HideAll();
         missionScorePanel.GetComponent<CanvasGroup>().HideAll();
         evalScorePanel.GetComponent<CanvasGroup>().ShowAll();
@@ -320,14 +346,17 @@ public class AdminPopupController : MonoBehaviour
         string[] r1 = { playerScoreInfo.email, "", "", "", "", "", "" };
         csv.AddRow(r1.ToList());
 
-        string[] r2 = { "", "Dimension 1", "Dimension 2", "Dimension 3", "Dimension 4", "Dimension 5", "Dimension 6" };
+        string[] r2 = { "", "Dimension 1", "", "Dimension 2", "", "Dimension 3", "", "Dimension 4", "", "Dimension 5", "", "Dimension 6" };
         csv.AddRow(r2.ToList());
+
+        string[] r2_2 = { "", "Recieved points", "Full score", "Recieved points", "Full score", "Recieved points", "Full score", "Recieved points", "Full score", "Recieved points", "Full score", "Recieved points", "Full score" };
+        csv.AddRow(r2_2.ToList());
 
         string[] r3 = { "Test", "", "", "", "", "", "" };
         var r3_l = r3.ToList();
         for (int i = 0; i < score.testScores.Count; i++)
         {
-            r3_l[i + 1] = score.testScores[i] + " | " + score.testAnswers[i];
+            r3_l[i + 1] = score.testScores[i] + "," + score.testAnswers[i];
         }
         csv.AddRow(r3_l);
 
@@ -335,7 +364,7 @@ public class AdminPopupController : MonoBehaviour
         var r4_l = r4.ToList();
         for (int i = 0; i < score.missionScores.Count; i++)
         {
-            r4_l[i + 1] = score.missionScores[i] + " | " + 3;
+            r4_l[i + 1] = score.missionScores[i] + "," + 3;
         }
         csv.AddRow(r4_l);
 
@@ -343,7 +372,7 @@ public class AdminPopupController : MonoBehaviour
         var r5_l = r5.ToList();
         for (int i = 0; i < score.preEvalScores.Count; i++)
         {
-            r5_l[i + 1] = score.preEvalScores[i] + " | " + 6;
+            r5_l[i + 1] = score.preEvalScores[i] + "," + 6;
         }
         csv.AddRow(r5_l);
 
@@ -351,12 +380,11 @@ public class AdminPopupController : MonoBehaviour
         var r6_l = r6.ToList();
         for (int i = 0; i < score.postEvalScores.Count; i++)
         {
-            r6_l[i + 1] = score.postEvalScores[i] + " | " + 6;
+            r6_l[i + 1] = score.postEvalScores[i] + "," + 6;
         }
         csv.AddRow(r6_l);
 
-        string csvString = csv.GetCSVStrings();
-
+        //string csvString = csv.GetCSVStrings();
         //Debug.Log(csvString);
 
         return csv;
